@@ -1,0 +1,8 @@
+class MatchItem
+  def initialize(name, matcher, negate)
+    self.name = name
+    self.matcher = matcher
+    self.negate = negate
+  end
+end
+

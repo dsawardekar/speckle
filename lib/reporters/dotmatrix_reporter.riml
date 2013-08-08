@@ -1,0 +1,47 @@
+class DotMatrixReporter < BaseReporter
+
+  def initialize()
+    super()
+    self.dots = 0
+    self.line_buffer = []
+  end
+
+  defm write(msg)
+    if self.dots > 50
+      self.writer.writeln(msg)
+      self.dots = 0
+    else
+      self.writer.write(msg)
+    end
+  end
+
+  defm on_spec_pass(meta, stats)
+    self.dots += 1
+    self.write('.')
+  end
+
+  defm on_spec_failure(meta, err, stats)
+    self.dots += 1
+    self.write(self.to_red("x"))
+
+    name = meta.get_sentence()
+    context = meta.get_context()
+    add(self.line_buffer, self.to_red("#{context} ##{name}"))
+    add(self.line_buffer, self.to_red("    #{err}"))
+    add(self.line_buffer, '')
+  end
+
+  defm on_spec_error(meta, err, stats)
+    self.on_spec_failure(meta, err, stats)
+  end
+
+  defm write_epilogue_separator()
+    self.writer.writeln('')
+    for line in self.line_buffer
+      self.writer.writeln(line)
+    end
+
+    self.writer.writeln("")
+  end
+
+end

@@ -1,0 +1,30 @@
+class SpecMeta
+  def initialize(context, method)
+    self.context = context
+    self.method = method
+  end
+
+  defm get_context()
+    return self.context
+  end
+
+  defm get_method()
+    return self.method
+  end
+
+  defm get_sentence()
+    return substitute(self.get_method(), '_', ' ', 'g')
+  end
+
+  defm set_duration(duration)
+    self.duration = duration
+  end
+
+  defm get_duration()
+    return self.duration
+  end
+
+  defm is_slow()
+    return self.get_duration() > g:speckle_slow_threshold
+  end
+end

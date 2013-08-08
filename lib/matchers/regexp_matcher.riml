@@ -1,0 +1,14 @@
+class RegExpMatcher
+  defm match(pattern, expr)
+    result = matchstr(expr, pattern)
+    return empty(result) == false
+  end
+
+  defm failure_message_for_match(pattern, expr)
+    return "expected “#{pattern}” to match #{expr}"
+  end
+
+  defm failure_message_for_mismatch(pattern, expr)
+    return "expected “#{pattern}” to not match #{expr}"
+  end
+end

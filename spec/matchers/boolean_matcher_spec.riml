@@ -1,0 +1,27 @@
+riml_include 'dsl.riml'
+
+class BooleanMatcherSpec
+  defm describe
+    return 'BooleanMatcher'
+  end
+
+  defm it_can_check_for_truthy
+    expect(true).to_be_true()
+    expect(1).to_be_true()
+  end
+
+  defm it_can_check_for_truthy_with_ok
+    expect(true).to_be_ok()
+    expect(1).to_be_ok()
+  end
+
+  defm it_can_check_for_falsy
+    expect(false).to_be_false()
+    expect(0).to_be_false()
+  end
+
+  defm it_can_check_for_falsy_with_not_ok
+    expect(false).to_not_be_ok()
+    expect(0).to_not_be_ok()
+  end
+end

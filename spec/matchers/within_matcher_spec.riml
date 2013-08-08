@@ -1,0 +1,18 @@
+riml_include 'dsl.riml'
+
+class WithinMatcherSpec
+  defm describe
+    return 'WithinMatcher'
+  end
+
+  defm it_can_check_for_floats_within_delta
+    expect(5).to_be_within([0.2, 5.1])
+    expect(5.005).to_be_within([0.01, 5.006])
+  end
+
+  defm it_can_check_for_floats_outside_delta
+    expect(5).to_not_be_within([0.02, 5.1])
+    expect(5.005).to_not_be_within([0.0001, 5.006])
+  end
+
+end

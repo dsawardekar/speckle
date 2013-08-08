@@ -1,0 +1,72 @@
+class Matchers
+  def initialize()
+    self.matchers = {}
+  end
+
+  defm load_defaults()
+    matcher = new EqualityMatcher()
+    self.define_pair('to_equal', 'to_not_equal', matcher)
+    self.define_pair('to_eq', 'to_neq', matcher)
+
+    matcher = new BooleanMatcher()
+    self.define_pair('to_be_true', 'to_be_false', matcher)
+    self.define_pair('to_be_ok', 'to_not_be_ok', matcher)
+
+    matcher = new ExistanceMatcher()
+    self.define_pair('to_exist', 'to_not_exist', matcher)
+
+    matcher = new AboveMatcher()
+    self.define_pair('to_be_above', 'to_not_be_above', matcher)
+    self.define_pair('to_be_gt', 'to_not_be_gt', matcher)
+
+    matcher = new BelowMatcher()
+    self.define_pair('to_be_below', 'to_not_be_below', matcher)
+    self.define_pair('to_be_lt', 'to_not_be_lt', matcher)
+
+    matcher = new BetweenMatcher()
+    self.define_pair('to_be_between', 'to_not_be_between', matcher)
+
+    matcher = new LengthMatcher()
+    self.define_pair('to_have_length', 'to_not_have_length', matcher)
+
+    matcher = new AtleastMatcher()
+    self.define_pair('to_be_at_least', 'to_not_be_at_least', matcher)
+    self.define_pair('to_be_gte', 'to_not_be_gte', matcher)
+
+    matcher = new AtmostMatcher()
+    self.define_pair('to_be_at_most', 'to_not_be_at_most', matcher)
+    self.define_pair('to_be_lte', 'to_not_be_lte', matcher)
+
+    matcher = new WithinMatcher()
+    self.define_pair('to_be_within', 'to_not_be_within', matcher)
+
+    matcher = new RegExpMatcher()
+    self.define_pair('to_match', 'to_not_match', matcher)
+    self.define_pair('to_have_string', 'to_not_have_string', matcher)
+
+    matcher = new DictKeyMatcher()
+    self.define_pair('to_have_key', 'to_not_have_key', matcher)
+  end
+
+  defm get_match_items()
+    return values(self.matchers)
+  end
+
+  defm get_match_item(name)
+    return self.matchers[name]
+  end
+
+  defm define_single(name, matcher)
+    item = new MatchItem(name, matcher)
+    self.matchers[name] = item
+  end
+
+  defm define_pair(ok_name, not_ok_name, matcher)
+    ok_item = new MatchItem(ok_name, matcher, false)
+    not_ok_item = new MatchItem(not_ok_name, matcher, true)
+
+    self.matchers[ok_name] = ok_item
+    self.matchers[not_ok_name] = not_ok_item
+  end
+
+end

@@ -1,0 +1,13 @@
+class AtmostMatcher
+  defm match(expected, actual)
+    return actual <= expected
+  end
+
+  defm failure_message_for_match(expected, actual)
+    return "expected “#{actual}” to be less than or equal to “#{expected}”"
+  end
+
+  defm failure_message_for_mismatch(expected, actual)
+    return "expected “#{actual}” to not be less than or equal to “#{expected}”"
+  end
+end

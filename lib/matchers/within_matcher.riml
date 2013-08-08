@@ -1,0 +1,28 @@
+class WithinMatcher
+  defm match(expected, actual)
+    delta = expected[0]
+    num = expected[1]
+    self.result = abs(num - actual)
+    return self.result <= delta
+  end
+
+  defm failure_message_for_match(expected, actual)
+    delta = expected[0]
+    num = expected[1]
+    actual_str = printf("%f", actual)
+    delta_str = printf("%f", delta)
+    num_str = printf("%f", num)
+    result_str = printf('%f', self.result)
+    return "expected “#{actual_str}” to be within +/- “#{delta_str}” of “#{num_str}”, delta was “#{result_str}”"
+  end
+
+  defm failure_message_for_mismatch(expected, actual)
+    delta = expected[0]
+    num = expected[1]
+    actual_str = printf("%f", actual)
+    delta_str = printf("%f", delta)
+    num_str = printf("%f", num)
+    result_str = printf('%f', self.result)
+    return "expected “#{actual_str}” to not be within +/- “#{delta_str}” of “#{num_str}”, delta was “#{result_str}”"
+  end
+end

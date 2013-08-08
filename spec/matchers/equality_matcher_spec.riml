@@ -1,0 +1,31 @@
+riml_include 'dsl.riml'
+
+class EqualityMatcherSpec
+  defm describe
+    return "EqualityMatcher"
+  end
+
+  defm it_can_check_equality_of_strings
+    expect('foo').to_equal('foo')
+  end
+
+  defm it_can_check_inequality_of_strings
+    expect('foo').to_not_equal('bar')
+  end
+
+  defm it_can_check_equality_of_numbers
+    expect(1).to_equal(1)
+  end
+
+  defm it_can_check_inequality_of_numbers
+    expect(1).to_not_equal(2)
+  end
+
+  defm it_can_check_equality_with_alias_eq
+    expect('foo').to_eq('foo')
+  end
+
+  defm it_can_check_inequality_with_alias_neq
+    expect('foo').to_neq('bar')
+  end
+end

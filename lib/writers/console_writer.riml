@@ -1,0 +1,28 @@
+class ConsoleWriter
+  def initialize()
+    self.writer = new FileWriter()
+  end
+
+  defm set_output_file(output_file)
+    self.writer.set_output_file(output_file)
+  end
+
+  defm write(line)
+    self.writer.write(line)
+    echon line
+  end
+
+  defm writeln(line)
+    self.writer.writeln(line)
+    echomsg line
+  end
+
+  defm flush()
+    self.writer.flush()
+  end
+
+  defm flush_line()
+    self.writer.flush_line()
+  end
+end
+

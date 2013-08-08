@@ -1,0 +1,34 @@
+class Expectation
+
+  def initialize(actual)
+    self.actual = actual
+  end
+
+  defm load(matchers)
+    matchers.load_defaults()
+
+    match_tester = new MatchTester()
+    match_items = matchers.get_match_items()
+
+    for match_item in match_items
+      func_name = "g:Expectation_#{match_item.name}"
+      matcher_func = <<EOS
+function! #{func_name}(...) dict  
+  if a:0 == 0
+    let expected = 'null'
+  else
+    let expected = a:1
+  endif
+
+  let matcher_name = '#{match_item.name}'
+  let match_tester = g:MatchTesterConstructor()
+  call match_tester.test_from_env(matcher_name, expected)"
+endfunction"   
+EOS
+      :exe matcher_func
+
+      self[match_item.name] = function(func_name)
+    end
+  end
+
+end

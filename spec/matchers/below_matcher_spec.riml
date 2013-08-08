@@ -1,0 +1,28 @@
+riml_include 'dsl.riml'
+
+class BelowMatcherSpec
+  defm describe
+    return 'BelowMatcher'
+  end
+
+  defm it_can_check_for_lower_bounds
+    expect(10).to_be_below(20)
+    expect(10).to_be_below(25)
+  end
+
+  defm it_can_check_for_negation_of_below
+    expect(10).to_not_be_below(1)
+    expect(10).to_not_be_below(10)
+  end
+
+  defm it_can_check_for_lower_bounds_with_lt_alias
+    expect(10).to_be_lt(20)
+    expect(10).to_be_lt(25)
+  end
+
+  defm it_can_check_for_negation_of_below_with_lt_alias
+    expect(10).to_not_be_lt(1)
+    expect(10).to_not_be_lt(10)
+  end
+
+end

@@ -1,0 +1,148 @@
+"" utils
+riml_include 'spec_timer.riml'
+riml_include 'spec_meta.riml'
+riml_include 'statistician.riml'
+
+"" matchers
+riml_include 'equality_matcher.riml'
+riml_include 'boolean_matcher.riml'
+riml_include 'existance_matcher.riml'
+riml_include 'above_matcher.riml'
+riml_include 'below_matcher.riml'
+riml_include 'between_matcher.riml'
+riml_include 'length_matcher.riml'
+riml_include 'atleast_matcher.riml'
+riml_include 'atmost_matcher.riml'
+riml_include 'within_matcher.riml'
+riml_include 'regexp_matcher.riml'
+riml_include 'dict_key_matcher.riml'
+
+"" matcher internals
+riml_include 'match_item.riml'
+riml_include 'match_tester.riml'
+riml_include 'matchers.riml'
+
+"" writers
+riml_include 'file_writer.riml'
+riml_include 'console_writer.riml'
+riml_include 'buffer_writer.riml'
+riml_include 'writer_factory.riml'
+
+"" reporters
+riml_include 'base_reporter.riml'
+riml_include 'spec_reporter.riml'
+riml_include 'min_reporter.riml'
+riml_include 'tap_reporter.riml'
+riml_include 'dotmatrix_reporter.riml'
+riml_include 'reporter_factory.riml'
+
+"" runners
+riml_include 'spec_runner.riml'
+riml_include 'runner.riml'
+
+"" dsl
+riml_include 'expectation.riml'
+
+"" main entry point
+class Speckle
+  defm configure()
+    options_map = {
+      \ 'output_file': '"speckle.log"',
+      \ 'file_mode': '0',
+      \ 'reporter_name': '"spec"',
+      \ 'slow_threshold': '10',
+      \ 'colorize': '1',
+      \ 'bail': '0'
+    \}
+
+    self.options(options_map)
+  end
+
+  defm options(options_map)
+    for [name, value] in items(options_map)
+      self.option(name, value)
+    end
+  end
+
+  defm option(variable, default)
+    if !exists("g:speckle_#{variable}")
+      execute("let g:speckle_#{variable} = #{default}")
+    end
+  end
+
+  defm get_writer()
+    factory = new WriterFactory()
+    writer = factory.get_writer('buffer')
+
+    if self.is_file_mode()
+      writer.set_output_file(self.get_output_file())
+    end
+
+    return writer
+  end
+
+  defm get_reporter(writer)
+    factory = new ReporterFactory()
+    reporter = factory.get_reporter(self.get_reporter_name())
+    reporter.set_writer(writer)
+
+    return reporter
+  end
+
+  defm is_file_mode
+    return g:speckle_file_mode
+  end
+
+  defm get_output_file
+    return g:speckle_output_file
+  end
+
+  defm get_reporter_name
+    return g:speckle_reporter_name
+  end
+
+  defm get_slow_threshold
+    return g:speckle_slow_threshold
+  end
+
+  defm get_colorize
+    return g:speckle_colorize
+  end
+
+  defm get_bail
+    return g:speckle_bail
+  end
+
+  defm run()
+    self.configure()
+
+    writer = self.get_writer()
+    stats = new Statistician()
+    reporter = self.get_reporter(writer)
+    reporter.set_colorize_output(self.get_colorize())
+    runner = new Runner()
+    runner.set_bail(self.get_bail())
+    functions = ''
+
+    :redir => functions
+    :silent function /SpecConstructor$/
+    :redir END
+
+    self.add_specs(runner, functions)
+
+    runner.start(reporter, stats)
+
+    if self.is_file_mode()
+      writer.flush()
+    end
+  end
+
+  defm add_specs(runner, lines)
+    classes = split(lines, "\n")
+    map(classes, "substitute(v:val, 'function ', '', '')")
+
+    for klass in classes
+      eval("a:runner.add(#{klass})")
+    end
+  end
+end

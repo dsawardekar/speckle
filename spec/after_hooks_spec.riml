@@ -1,0 +1,58 @@
+riml_include 'dsl.riml'
+
+class AfterHookSpec
+  defm describe
+    return 'After hooks'
+  end
+
+  defm before
+    self.stuff = 'foo'
+  end
+
+  defm it_adds_more_stuff
+    self.more_stuff = 'bar'
+    expect(self.stuff).to_equal('foo')
+  end
+
+  defm after
+    unless self.stuff == 'foo'
+      throw 'before hook not called'
+    end
+    unless self.more_stuff == 'bar'
+      throw 'after called before test'
+    end
+  end
+end
+
+class AfterEachHookSpec
+  defm describe
+    return 'After_each hooks'
+  end
+
+  defm before
+    self.stuff = 'foo'
+  end
+
+  defm it_adds_some_more_stuff
+    self.more_stuff = 'bar'
+    expect(self.stuff).to_equal('foo')
+  end
+
+  defm after_each
+    unless self.stuff == 'foo'
+      throw 'before hook not called'
+    end
+    unless self.more_stuff == 'bar'
+      throw 'after called before test'
+    end
+
+    self.even_more_stuff = 'foobar'
+  end
+
+  defm after
+    unless self.even_more_stuff == 'foobar'
+      throw 'after_each called before after'
+    end
+  end
+
+end
