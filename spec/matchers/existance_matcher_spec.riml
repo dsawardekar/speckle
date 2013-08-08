@@ -1,0 +1,17 @@
+riml_include 'dsl.riml'
+
+class ExistanceMatcherSpec
+  
+  defm describe
+    return 'ExistanceMatcher'
+  end
+
+  defm it_can_check_for_presence_of_global_variable
+    g:existance_matcher_global_var = 1
+    expect('g:existance_matcher_global_var').to_exist()
+  end
+
+  defm it_can_check_for_absence_of_global_variable
+    expect('g:undefined_existance_matcher_global_var').to_not_exist()
+  end
+end

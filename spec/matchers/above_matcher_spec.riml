@@ -1,0 +1,27 @@
+riml_include 'dsl.riml'
+
+class AboveMatcherSpec
+  defm describe
+    return 'AboveMatcher'
+  end
+
+  defm it_can_check_for_upper_bounds
+    expect(10).to_be_above(1)
+    expect(20).to_be_above(10)
+  end
+
+  defm it_can_check_for_negation_of_upper_bounds
+    expect(10).to_not_be_above(20)
+    expect(10).to_not_be_above(10)
+  end
+
+  defm it_can_check_for_upper_bounds_with_alias_gt
+    expect(10).to_be_gt(1)
+    expect(20).to_be_gt(10)
+  end
+
+  defm it_can_check_for_negation_of_upper_bounds_with_alias_gt
+    expect(10).to_not_be_gt(20)
+    expect(10).to_not_be_gt(10)
+  end
+end

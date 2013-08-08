@@ -1,0 +1,17 @@
+riml_include 'dsl.riml'
+
+class BetweenMatcherSpec
+  defm describe
+    return 'BetweenMatcher'
+  end
+
+  defm it_can_check_for_value_between_bounds
+    expect(10).to_be_between([1, 100])
+    expect(10).to_be_between([1, 10])
+    expect(1).to_be_between([1, 10])
+  end
+
+  defm it_can_check_for_value_outside_bounds
+    expect(10).to_not_be_between([20, 30])
+  end
+end

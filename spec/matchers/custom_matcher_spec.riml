@@ -1,0 +1,47 @@
+riml_include 'dsl.riml'
+
+class Person
+  def initialize(name)
+    self.name = name
+  end
+
+  defm get_name()
+    return self.name
+  end
+end
+
+class PersonNameMatcher
+  defm match(expected, actual)
+    self.result = actual.get_name()
+    return self.result == expected
+  end
+
+  defm failure_message_for_match(expected, actual)
+    return "expected person name to be “#{expected}” but was “#{self.result}”"
+  end
+
+  defm failure_message_for_mismatch(expected, actual)
+    return "expected person name to not be “#{expected}” but was “#{self.result}”"
+  end
+end
+
+matcher = new PersonNameMatcher()
+define_matcher('to_have_name', 'to_not_have_name', matcher)
+
+class PersonNameMatcherSpec
+  defm describe
+    return 'Custom matcher to_have_name and to_not_have_name'
+  end
+
+  defm before_each
+    self.person = new Person('john')
+  end
+
+  defm it_can_check_for_persons_name
+    expect(self.person).to_have_name('john')
+  end
+
+  defm it_can_check_for_negation_of_persons_name
+    expect(self.person).to_not_have_name('foo')
+  end
+end

@@ -1,0 +1,19 @@
+riml_include 'dsl.riml'
+
+class DictKeyMatcherSpec
+  defm describe
+    return 'DictKeyMatcher'
+  end
+
+  defm it_can_check_for_presence_of_key
+    box = {}
+    box.red = 'yes'
+
+    expect(box).to_have_key('red')
+  end
+
+  defm it_can_check_for_absence_of_key
+    box = {}
+    expect(box).to_not_have_key('red')
+  end
+end

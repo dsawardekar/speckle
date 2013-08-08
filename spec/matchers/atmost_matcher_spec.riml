@@ -1,0 +1,29 @@
+riml_include 'dsl.riml'
+
+class AtmostMatcherSpec
+  defm describe
+    return 'AtmostMatcher'
+  end
+
+  defm it_can_check_for_most
+    expect(5).to_be_at_most(5)
+    expect(5).to_be_at_most(6)
+    expect(6).to_be_at_most(10)
+  end
+
+  defm it_can_check_for_negation_of_most
+    expect(6).to_not_be_at_most(5)
+    expect(11).to_not_be_at_most(10)
+  end
+
+  defm it_can_check_for_most_with_alias_lte
+    expect(5).to_be_lte(5)
+    expect(5).to_be_lte(6)
+    expect(6).to_be_lte(10)
+  end
+
+  defm it_can_check_for_negation_of_most_with_alias_lte
+    expect(6).to_not_be_lte(5)
+    expect(11).to_not_be_lte(10)
+  end
+end

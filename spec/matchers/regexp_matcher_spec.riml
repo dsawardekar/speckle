@@ -1,0 +1,31 @@
+riml_include 'dsl.riml'
+
+class RegExpMatcherSpec
+  defm describe
+    return 'RegExpMatcher'
+  end
+
+  defm it_can_match_string_patterns
+    expect('lorem').to_match("ore")
+    expect('lorem').to_not_match('foo')
+  end
+
+  defm it_can_match_regex_patterns
+    expect('lorem').to_match("^l")
+    expect('lorem').to_match("m$")
+
+    expect('lorem').to_not_match("^r")
+    expect('lorem').to_not_match("a$")
+  end
+
+  defm it_can_match_strings
+    expect('lorem').to_have_string('ore')
+    expect('lorem').to_not_have_string('ipsum')
+  end
+
+  defm it_can_match_complex_patterns
+    expect('Four0Five').to_match('^\w\+[0-9]\w\+$')
+    expect('0Four0').to_not_match('^\w\+[0-9]\w\+$')
+  end
+
+end

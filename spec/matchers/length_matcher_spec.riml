@@ -1,0 +1,18 @@
+riml_include 'dsl.riml'
+
+class LengthMatcherSpec
+  defm describe
+    return 'LengthMatcher'
+  end
+
+  defm it_can_check_for_length_of_string
+    expect("foo").to_have_length(3)
+    expect("foo").to_not_have_length(4)
+  end
+
+  defm it_can_check_for_length_of_list
+    expect([1, 2, 3]).to_have_length(3)
+    expect([1, 2, 3]).to_not_have_length(4)
+  end
+
+end
