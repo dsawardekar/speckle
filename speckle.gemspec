@@ -11,8 +11,8 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/dsawardekar/speckle"
   s.license  = "MIT"
 
-  s.description   = %q{Write a gem description}
-  s.summary       = %q{Write a gem summary}
+  s.description   = %q{Behaviour driven framework for testing vim scripts written in Riml}
+  s.summary       = %q{Compiles *_spec.riml spec files into *.vim files and runs them inside vim}
 
   s.files         = `git ls-files`.split($/)
   s.executables   = s.files.grep(%r{^bin/}) { |f| File.basename(f) }

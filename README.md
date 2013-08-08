@@ -1,6 +1,6 @@
 # Speckle
 
-Behaviour driven development framework for the Riml programming language.
+Behaviour driven framework for testing vim scripts written in Riml.
 
 ## Installation
 
