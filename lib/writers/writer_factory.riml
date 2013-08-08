@@ -1,0 +1,13 @@
+class WriterFactory
+  defm get_writer(writer_name)
+    if a:writer_name == 'file'
+      return new FileWriter()
+    elseif a:writer_name == 'console'
+      return new ConsoleWriter()
+    elseif a:writer_name == 'buffer'
+      return new BufferWriter()
+    else
+      return new BufferWriter()
+    end
+  end
+end
