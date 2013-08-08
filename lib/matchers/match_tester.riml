@@ -1,0 +1,33 @@
+class MatchTester
+
+  defm test_from_env(matcher_name, expected)
+    env = g:speckle_env
+    matchers = env.matchers
+    match_item = matchers.get_match_item(matcher_name)
+    negate = match_item.negate
+    matcher = match_item.matcher
+    actual = env.actual
+
+    tester = new MatchTester()
+    tester.test(matcher, negate, a:expected, actual)
+  end
+
+  defm test(matcher, negate, expected, actual)
+    result = matcher.match(expected, actual)
+    g:speckle_env.assertions += 1
+    if negate
+      if result
+        message = matcher.failure_message_for_mismatch(expected, actual)
+        message = "AssertionError: #{message}"
+        throw message
+      end
+    else
+      unless result
+        message = matcher.failure_message_for_match(expected, actual)
+        message = "AssertionError: #{message}"
+        throw message
+      end
+    end
+  end
+
+end

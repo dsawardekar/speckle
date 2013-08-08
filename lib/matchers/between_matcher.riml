@@ -1,0 +1,19 @@
+class BetweenMatcher
+  defm match(bounds, actual)
+    min = bounds[0]
+    max = bounds[1]
+    return actual >= min && actual <= max
+  end
+
+  defm failure_message_for_match(bounds, actual)
+    min = bounds[0]
+    max = bounds[1]
+    return "expected “#{actual}” to be between “#{min} .. #{max}”"
+  end
+
+  defm failure_message_for_mismatch(bounds, actual)
+    min = bounds[0]
+    max = bounds[1]
+    return "expected “#{actual}” to not be between “#{min} .. #{max}”"
+  end
+end
