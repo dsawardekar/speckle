@@ -1,0 +1,49 @@
+class Runner
+  def initialize()
+    self.specs = []
+    self.halt = false
+    self.stopped = false
+    self.bail = false
+  end
+
+  defm set_bail(bail)
+    self.bail = bail
+  end
+
+  defm get_bail()
+    return self.bail
+  end
+
+  defm add(spec)
+    add(self.specs, spec)
+  end
+
+  defm start(reporter, stats)
+    reporter.on_start(stats)
+
+    timer = new SpecTimer()
+    timer.start()
+
+    for spec in self.specs
+      if self.stopped
+        break
+      end
+
+      spec_runner = new SpecRunner(spec)
+      spec_runner.set_bail(self.get_bail())
+      spec_runner.start(reporter, stats)
+
+      if spec_runner.has_bailed()
+        self.stopped = true
+      end
+    end
+
+    timer.stop()
+    reporter.on_end(timer.get_duration(), stats)
+  end
+
+  defm stop()
+    self.stopped = true
+  end
+
+end
