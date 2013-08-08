@@ -1,0 +1,29 @@
+if !exists("g:speckle_env")
+  g:speckle_env = {}
+  g:speckle_env.matchers = g:MatchersConstructor()
+  g:speckle_env.assertions = 0
+end
+
+
+def expect(actual)
+  env = g:speckle_env
+  env.actual = actual
+  matchers = env.matchers
+
+  expectation = g:ExpectationConstructor(a:actual)
+  expectation.load(matchers)
+
+  return expectation
+end
+
+def get_matchers()
+  env = g:speckle_env
+  matchers = env.matchers
+
+  return matchers
+end
+
+def define_matcher(ok_name, not_ok_name, matcher)
+  matchers = get_matchers()
+  matchers.define_pair(ok_name, not_ok_name, matcher)
+end
