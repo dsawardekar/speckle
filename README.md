@@ -1,24 +1,14 @@
 # Speckle
 
-TODO: Write a gem description
+Behaviour driven development framework for the Riml programming language.
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'speckle'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
 
     $ gem install speckle
 
 ## Usage
 
-TODO: Write usage instructions here
+    $ speckle [options] [file(s) OR directory]
 
 ## Contributing
 

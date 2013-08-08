@@ -1,4 +1,4 @@
-Copyright (c) 2013 Darshan Sawardekar
+Copyright (c) 2013 Darshan Sawardekar <darshan@sawardekar.org>
 
 MIT License
 
