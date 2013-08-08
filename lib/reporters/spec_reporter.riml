@@ -1,0 +1,58 @@
+class SpecReporter < BaseReporter
+
+  def initialize()
+    super()
+    self.indents = 0
+  end
+
+  defm write(msg)
+    line = "#{self.indent_to_str()}#{msg}"
+    self.writer.writeln(line)
+  end
+
+  defm on_start(stats)
+  end
+
+  defm on_context_start(context, stats)
+    self.write("#{context}")
+    self.indent(1)
+  end
+
+  defm on_context_end(context, stats)
+    self.unindent(1)
+  end
+
+  defm on_spec_pass(meta, stats)
+    duration_msg = self.get_duration_msg(meta)
+    self.write("#{self.get_tick()} #{meta.get_sentence()} #{duration_msg}")
+  end
+
+  defm on_spec_failure(meta, err, stats)
+    self.write("#{self.get_cross()} #{self.to_red(meta.get_sentence())}")
+    self.indent(2)
+    self.write(self.to_red(err))
+    self.unindent(2)
+  end
+
+  defm on_spec_error(meta, err, stats)
+    self.on_spec_failure(meta, err, stats)
+  end
+
+  defm indent_to_str()
+    return repeat("  ", self.indents)
+  end
+
+  defm indent(size)
+    self.indents += size
+  end
+
+  defm unindent(size)
+    self.indents -= size
+  end
+
+  defm write_epilogue_separator()
+    self.writer.writeln('')
+    super()
+  end
+
+end

@@ -1,0 +1,13 @@
+class MinReporter < BaseReporter
+
+  defm on_spec_failure(meta, err, stats)
+    name = meta.get_sentence()
+    context = meta.get_context()
+    self.writer.writeln(self.to_red("#{context} ##{name} - #{err}"))
+  end
+  
+  defm on_spec_error(meta, err, stats)
+    self.on_spec_failure(meta, err, stats)
+  end
+  
+end

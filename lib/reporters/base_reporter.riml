@@ -1,0 +1,126 @@
+class BaseReporter
+  def initialize()
+    self.colorize_output = true
+  end
+
+  defm set_writer(writer)
+    self.writer = writer
+  end
+
+  defm on_start(stats)
+  end
+
+  defm on_end(duration, stats)
+    self.write_epilogue(duration, stats)
+  end
+
+  defm on_context_start(context, stats)
+  end
+
+  defm on_context_end(context, stats)
+  end
+
+  defm on_spec_start(meta, stats)
+  end
+
+  defm on_spec_end(meta, stats)
+  end
+
+  defm on_spec_pass(meta, stats)
+  end
+
+  defm on_spec_failure(meta, err, stats)
+  end
+  
+  defm on_spec_error(meta, err, stats)
+  end
+
+  defm on_spec_pending(meta, stats)
+  end
+
+  defm duration_to_str(duration)
+    time = a:duration
+    if time >= 1000
+      time = time / 1000
+      return "#{time}s"
+    else
+      return "#{time}ms"
+    end
+  end
+
+  defm get_duration_msg(meta)
+    if meta.is_slow()
+      duration_str = self.duration_to_str(meta.get_duration())
+      return "(#{duration_str})"
+    else
+      return ''
+    end
+  end
+
+  defm write_epilogue_separator
+    self.writer.writeln("----------------------------------------------------")
+  end
+
+  defm write_epilogue(duration, stats)
+    self.write_epilogue_separator()
+    duration_str = self.duration_to_str(duration)
+    if stats.is_ok()
+      icon = self.get_tick_icon()
+    else
+      icon = self.get_cross_icon()
+    end
+
+    self.writer.writeln(self.to_color("#{icon} #{stats.get_count()} tests completed (#{duration_str})", stats))
+    self.writer.writeln("Passed: #{stats.get_passes()}, Failures: #{stats.get_failures()}, Errors: #{stats.get_errors()}, Assertions: #{stats.get_assertions()}")
+  end
+
+  defm set_colorize_output(colorize_output)
+    self.colorize_output = colorize_output
+  end
+
+  defm get_colorize_output()
+    return self.colorize_output
+  end
+
+  defm colorize(str, color)
+    if self.get_colorize_output()
+      return "[#{color}#{str}[0m"
+    else
+      return str
+    end
+  end
+
+  defm to_color(str, stats)
+    if stats.is_ok()
+      return self.to_green(str)
+    else
+      return self.to_red(str)
+    end
+  end
+
+  defm to_red(str)
+    return self.colorize(str, '31m')
+  end
+
+  defm to_green(str)
+    return self.colorize(str, '32m')
+  end
+
+  defm get_tick_icon()
+    return '✓'
+  end
+
+  defm get_cross_icon()
+    return '✖'
+  end
+
+  defm get_tick()
+    return self.to_green(self.get_tick_icon())
+  end
+
+  defm get_cross()
+    return self.to_red(self.get_cross_icon())
+  end
+
+end
+
