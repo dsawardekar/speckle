@@ -1,0 +1,96 @@
+class SpecRunner
+
+  def initialize(spec)
+    self.spec = spec
+    self.stopped = false
+    self.bail = false
+    self.bailed = false
+  end
+
+  defm set_bail(bail)
+    self.bail = bail
+  end
+
+  defm has_bailed()
+    return self.bailed
+  end
+
+  defm start(reporter, stats)
+    spec = self.spec
+    did_fail = false
+    context = self.call_hook('describe')
+    reporter.on_context_start(context, stats)
+    self.call_hook('before')
+
+    for method in keys(spec)
+      if self.stopped
+        break
+      end
+
+      if method =~ '^it'
+        timer = new SpecTimer()
+        meta = new SpecMeta(context, method)
+
+        reporter.on_spec_start(meta, stats)
+        result = 0
+
+        try
+          timer.start()
+
+          self.call_hook('before_each')
+          eval("spec.#{method}()")
+          self.call_hook('after_each')
+
+          timer.stop()
+          meta.set_duration(timer.get_duration())
+
+          stats.inc_passes()
+          reporter.on_spec_pass(meta, stats)
+        catch /Unknown function.*expect/
+          did_fail = true
+          stats.inc_failures()
+          exception = 'DSLError: expect() not found, dsl.riml may not be included'
+          reporter.on_spec_failure(meta, exception, stats)
+        catch /Unknown function.*define_matcher/
+          did_fail = true
+          stats.inc_failures()
+          exception = 'DSLError: define_matcher() not found, dsl.riml may not be included'
+          reporter.on_spec_failure(meta, exception, stats)
+        catch /^AssertionError/
+          did_fail = true
+          stats.inc_failures()
+          reporter.on_spec_failure(meta, v:exception, stats)
+        catch /.*/
+          did_fail = true
+          stats.inc_errors()
+          reporter.on_spec_error(meta, v:exception, stats)
+        end
+
+        reporter.on_spec_end(meta, stats)
+        :redraw
+
+        if did_fail && self.bail
+          self.bailed = true
+          break
+        end
+      end
+    end
+
+    self.call_hook('after')
+    reporter.on_context_end(context, stats)
+  end
+
+  defm call_hook(hook)
+    spec = self.spec
+    if has_key(spec, hook)
+      return eval("spec.#{hook}()");
+    else
+      return "Undefined hook: #{hook}"
+    end
+  end
+
+  defm stop()
+    self.stopped = true
+  end
+
+end
