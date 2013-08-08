@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+require File.expand_path('../../lib/speckle/loader', __FILE__)
+ 
+module Speckle
+
+  require 'speckle/cli/app'
+
+  app = Speckle::CLI::App.new
+  app.start(ARGV)
+
+end
