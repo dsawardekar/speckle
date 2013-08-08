@@ -1,0 +1,30 @@
+class SpecTimer
+  def initialize()
+    self.start_time = 0
+    self.end_time = 0
+  end
+
+  defm start()
+    self.start_time = reltime()
+  end
+
+  defm stop()
+    self.end_time = reltime()
+    self.duration = self.time_to_ms(reltime(self.start_time))
+  end
+
+  defm get_duration()
+    return self.duration
+  end
+
+  defm time_to_ms(time)
+    duration_str = reltimestr(time)
+    duration_split = split(duration_str, '\.')
+    seconds = str2nr(duration_split[0])
+    microseconds = str2nr(duration_split[1])
+    milliseconds = (seconds * 1000) + (microseconds / 1000)
+
+    return milliseconds
+  end
+
+end

@@ -1,0 +1,70 @@
+class Statistician
+  def initialize()
+    self.count = 0
+    self.passes = 0
+    self.failures = 0
+    self.errors = 0
+    self.pending = 0
+  end
+
+  defm inc_count()
+    self.count += 1
+  end
+
+  defm inc_passes()
+    self.inc_count()
+    self.passes += 1
+  end
+
+  defm inc_failures()
+    self.inc_count()
+    self.failures += 1
+  end
+
+  defm inc_pending()
+    self.inc_count()
+    self.pending += 1
+  end
+
+  defm inc_errors()
+    self.inc_count()
+    self.errors += 1
+  end
+
+  defm inc_assertions()
+    env = g:speckle_env
+    env.assertions += 1
+  end
+
+  defm get_count()
+    return self.count
+  end
+
+  defm get_passes()
+    return self.passes
+  end
+
+  defm get_failures()
+    return self.failures
+  end
+
+  defm get_pending()
+    return self.pending
+  end
+
+  defm get_errors()
+    return self.errors
+  end
+
+  defm get_assertions()
+    return g:speckle_env.assertions
+  end
+
+  defm is_ok()
+    return self.get_errors() == 0 && self.get_failures() == 0
+  end
+
+  defm is_not_ok()
+    return !self.is_ok()
+  end
+end
