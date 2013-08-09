@@ -2,6 +2,8 @@
 
 Behaviour driven framework for testing vim scripts written in Riml.
 
+[![Build Status](https://travis-ci.org/dsawardekar/speckle.png)](https://travis-ci.org/dsawardekar/speckle)
+
 ## Installation
 
     $ gem install speckle
