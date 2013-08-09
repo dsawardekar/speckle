@@ -10,7 +10,7 @@ desc "Run speckle's rspec tests"
 RSpec::Core::RakeTask.new(:spec)
 
 desc 'Run rspec and speckle tests'
-task :test => [:spec, 'speckle:compile_and_test']
+task :test => [:spec, 'speckle:vim_version', 'speckle:compile_and_test']
 
 desc 'Clean temporary files'
 task :clean => ['speckle:clean']
@@ -143,6 +143,11 @@ namespace :speckle do
     verbose VERBOSE do
       Rake::Task['speckle:test'].invoke
     end
+  end
+  
+  desc 'Shows vim --version'
+  task :vim_version do
+    sh "#{TEST_VIM} --version"
   end
 
   desc "Launch test runner"
