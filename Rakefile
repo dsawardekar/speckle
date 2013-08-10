@@ -61,6 +61,7 @@ namespace :speckle do
   TEST_VIM = ENV['TEST_VIM'] || 'vim'
   TEST_REPORTER = ENV['TEST_REPORTER'] || 'spec'
   TEST_LOG = "#{BUILD_DIR}/speckle.log"
+  DEBUG_LOG = "#{BUILD_DIR}/debug.log"
   TEST_SOURCES  = FileList.new do |fl|
     sources = ENV['TEST_SOURCES']
     if sources
@@ -205,6 +206,7 @@ CMD
     end
 
     launch_cmd += <<CMD
+      let &verbosefile = '#{DEBUG_LOG}'
       let g:speckle_file_mode = 1
       let g:speckle_output_file = '#{TEST_LOG}'
       let g:speckle_reporter_name = '#{TEST_REPORTER}'
