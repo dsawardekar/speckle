@@ -2,6 +2,12 @@ module Speckle
   module CLI
 
     require 'rake'
+    require 'speckle/list/builder'
+    require 'speckle/list/absolute_path_transformer'
+    require 'speckle/list/dir_expander'
+    require 'speckle/list/extension_transformer'
+    require 'speckle/list/file_content_filter'
+    require 'speckle/list/pattern_filter'
 
     class RakeApp
       def initialize(options)
@@ -37,6 +43,8 @@ module Speckle
       end
 
       def invoke_task(name)
+        #puts "invoke_task: #{name}"
+        #rake
         rake.invoke_task("speckle:#{name.to_s}")
       end
 
@@ -77,51 +85,40 @@ module Speckle
         "#{@options.cwd}/build"
       end
 
-      def test_compiled
-        compiled = test_sources.map do |s|
-          s.ext('vim')
-        end
-
-        compiled
+      def test_sources
+        get_builder.build
       end
 
-      def test_sources
-        sources = []
-        grep_pattern = @options.grep_pattern
-        grep_invert = @options.grep_invert
-        unless grep_pattern.nil?
-          regex = Regexp.new(grep_pattern)
+      def test_compiled
+        sources = test_sources
+        sources.collect do |source|
+          source.ext('vim')
         end
+      end
 
-        inputs.each do |input|
-          if File.directory?(input)
-            if grep_pattern.nil?
-              sources << "#{input}/**/*_spec.riml"
-            else
-              sources = Dir.glob("#{input}/**/*_spec.riml")
-              sources.keep_if do |source|
-                matched = regex.match(source)
-                if grep_invert
-                  matched = !matched
-                end
-
-                matched
-              end
-            end
-          else
-            if grep_pattern.nil?
-              sources << input
-            else
-              matched = regex.match(input)
-              if grep_invert
-                matched = !matched
-              end
-              sources << input if matched
-            end
+      def get_builder
+        if @source_builder.nil?
+          @source_builder = Speckle::List::Builder.new
+          @options.inputs.each do |input|
+            @source_builder.add_source input
           end
+
+          @source_builder.add_filter Speckle::List::DirExpander.new('**/*_spec.riml')
+
+          unless @options.tag.nil?
+            @source_builder.add_filter Speckle::List::FileContentFilter.new(@options.tag, false)
+          end
+
+          unless @options.grep_pattern.nil?
+            @source_builder.add_filter Speckle::List::PatternFilter.new(@options.grep_pattern, @options.grep_invert)
+          end
+
+          # Not using this at the moment, as it's simpler to not rebuild the source paths for test_compiled
+          #@source_builder.add_filter Speckle::List::AbsolutePathTransformer.new
+          #@source_builder.add_filter Speckle::List::ExtensionTransformer.new('vim')
         end
 
-        sources
+        @source_builder
       end
 
       def test_libs

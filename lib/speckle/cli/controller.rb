@@ -2,15 +2,19 @@ module Speckle
   module CLI
 
     require 'speckle/version'
+    require 'speckle/cli/rake_app'
 
     class Controller
 
-      def initialize(options, rake_app)
+      def initialize(options)
         @options = options
-        @rake_app = rake_app
       end
 
       def rake(task)
+        if @rake_app.nil?
+          @rake_app = RakeApp.new(@options)
+        end
+
         @rake_app.invoke_task(task)
       end
 
