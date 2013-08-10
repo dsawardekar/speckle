@@ -257,6 +257,14 @@ module Speckle
         expect(['--reporter', 'min']).to yield_option_value('reporter', 'min')
       end
 
+      it 'does not have tag by default' do
+        expect('').to_not have_default_option('tag')
+      end
+
+      it 'takes tag fram --tag' do
+        expect(['--tag', 'focus']).to yield_option_value('tag', 'focus')
+      end
+
     end
 
     describe 'Complete CLI options' do

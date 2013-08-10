@@ -34,6 +34,7 @@ namespace :speckle do
   SKIP_VIMRC = ENV['SKIP_VIMRC'] == '1' || false
   COLORIZE = ENV['COLORIZE'] || 1
   BAIL = ENV['BAIL'] || 0
+  TAG = ENV['TAG'] || false
 
   # speckle sources
   SPECKLE_DIR = File.dirname(__FILE__)
@@ -213,6 +214,14 @@ CMD
       let g:speckle_slow_threshold = #{SLOW_THRESHOLD}
       let g:speckle_colorize = #{COLORIZE}
       let g:speckle_bail = #{BAIL}
+CMD
+    if TAG
+      launch_cmd += <<CMD
+      let g:speckle_tag = '#{TAG}'
+CMD
+    end
+
+    launch_cmd += <<CMD
       let speckle = g:SpeckleConstructor()
       :autocmd VimEnter * :call speckle.run()
       :q!
