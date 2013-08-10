@@ -58,6 +58,7 @@ module Speckle
         rake_env('SKIP_VIMRC', to_int(@options.skip_vimrc))
         rake_env('COLORIZE', to_int(@options.colorize))
         rake_env('BAIL', to_int(@options.bail))
+        rake_env('TAG', @options.tag)
 
         if @options.verbose
           rake_env('VERBOSE', 'yes')

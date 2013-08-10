@@ -25,6 +25,7 @@ module Speckle
         options.slow_threshold = 10
         options.colorize = true
         options.bail = false
+        options.tag = nil
 
         parser = OptionParser.new do |opts|
           options.opts = opts
@@ -56,6 +57,10 @@ module Speckle
 
           opts.on('-i', '--invert', 'Inverts --grep matches') do
             options.grep_invert = true
+          end
+
+          opts.on('--tag <tag>', 'Only run tests matching tag') do |tag|
+            options.tag = tag
           end
 
           opts.on('-r', '--reporter <reporter>', 'Specify the reporter to use (spec, min, dot, tap)') do |reporter|
