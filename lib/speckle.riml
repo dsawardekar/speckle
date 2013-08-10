@@ -52,7 +52,8 @@ class Speckle
       \ 'reporter_name': '"spec"',
       \ 'slow_threshold': '10',
       \ 'colorize': '1',
-      \ 'bail': '0'
+      \ 'bail': '0',
+      \ 'tag': '""'
     \}
 
     self.options(options_map)
@@ -112,6 +113,10 @@ class Speckle
   defm get_bail
     return g:speckle_bail
   end
+  
+  defm get_tag
+    return g:speckle_tag
+  end
 
   defm run()
     self.configure()
@@ -120,10 +125,12 @@ class Speckle
     stats = new Statistician()
     reporter = self.get_reporter(writer)
     reporter.set_colorize_output(self.get_colorize())
+
     runner = new Runner()
     runner.set_bail(self.get_bail())
-    functions = ''
+    runner.set_tag(self.get_tag())
 
+    functions = ''
     :redir => functions
     :silent function /SpecConstructor$/
     :redir END

@@ -1,0 +1,11 @@
+riml_include 'dsl.riml'
+
+class TaggedSpec
+  defm describe
+    return 'TaggedSpec'
+  end
+
+  defm it_has_a_tag_focus
+    expect(true).to_be_true()
+  end
+end
