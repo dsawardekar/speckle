@@ -5,10 +5,15 @@ class SpecRunner
     self.stopped = false
     self.bail = false
     self.bailed = false
+    self.tag = ''
   end
 
   defm set_bail(bail)
     self.bail = bail
+  end
+
+  defm set_tag(tag)
+    self.tag = tag
   end
 
   defm has_bailed()
@@ -27,7 +32,7 @@ class SpecRunner
         break
       end
 
-      if method =~ '^it'
+      if self.can_run_test_for(method)
         timer = new SpecTimer()
         meta = new SpecMeta(context, method)
 
@@ -91,6 +96,22 @@ class SpecRunner
 
   defm stop()
     self.stopped = true
+  end
+
+  defm is_test_method(method)
+    return method =~ '^it'
+  end
+
+  defm is_method_tagged(method)
+    return method =~ "_#{self.tag}$"
+  end
+
+  defm can_run_test_for(method)
+    if self.tag == ''
+      return self.is_test_method(method)
+    else
+      return self.is_test_method(method) && self.is_method_tagged(method)
+    end
   end
 
 end

@@ -35,6 +35,7 @@ namespace :speckle do
   COLORIZE = ENV['COLORIZE'] || 1
   BAIL = ENV['BAIL'] || 0
   TAG = ENV['TAG'] || false
+  CI = ENV['CI'] || false
 
   # speckle sources
   SPECKLE_DIR = File.dirname(__FILE__)
@@ -74,7 +75,6 @@ namespace :speckle do
       fl.include('spec/**/*_spec.riml')
     end
   end
-
   TEST_COMPILED = FileList.new do |fl|
     fl.exclude("#{SPECKLE_OUTPUT}")
     compiled = ENV['TEST_COMPILED']
@@ -85,6 +85,22 @@ namespace :speckle do
       end
     else
       fl.include("#{BUILD_DIR}/**/*.vim")
+    end
+  end
+
+  TAGGED_TEST_SOURCES = FileList.new do |fl|
+    TEST_SOURCES.each do |s|
+      if TAG and File.readlines(s).grep(Regexp.new(TAG)).size > 0
+        fl.include(s)
+      end
+    end
+  end
+
+  TAGGED_TEST_COMPILED = FileList.new do |fl|
+    TEST_SOURCES.each do |s|
+      if TAG and File.readlines(s).grep(Regexp.new(TAG)).size > 0
+        fl.include("#{BUILD_DIR}/#{s.ext('vim')}")
+      end
     end
   end
 
@@ -124,7 +140,7 @@ namespace :speckle do
 
   desc "Compile specs"
   task :compile_tests => [:build] do
-    TEST_SOURCES.each do |t|
+    get_test_sources.each do |t|
       verbose VERBOSE do
         puts "Compiling: #{t} "
         sh "bundle exec riml -c #{t} -I #{TEST_LIBS}"
@@ -149,7 +165,9 @@ namespace :speckle do
   
   desc 'Shows vim --version'
   task :vim_version do
-    sh "#{TEST_VIM} --version"
+    if CI
+      sh "#{TEST_VIM} --version"
+    end
   end
 
   desc "Launch test runner"
@@ -167,6 +185,22 @@ namespace :speckle do
   desc "Watch files for changes and run tests"
   task :watch do 
     puts '--- TODO ---'
+  end
+
+  def get_test_sources
+    if TAG
+      return TAGGED_TEST_SOURCES
+    else
+      return TEST_SOURCES
+    end
+  end
+
+  def get_test_compiled
+    if TAG
+      return TAGGED_TEST_COMPILED
+    else
+      return TEST_COMPILED
+    end
   end
 
   def get_vim_options
@@ -200,7 +234,7 @@ namespace :speckle do
       source #{SPECKLE_OUTPUT}
 CMD
 
-    TEST_COMPILED.each do |t|
+    get_test_compiled.each do |t|
       launch_cmd += <<CMD
       source #{t}
 CMD
