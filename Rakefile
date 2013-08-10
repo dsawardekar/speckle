@@ -88,22 +88,6 @@ namespace :speckle do
     end
   end
 
-  TAGGED_TEST_SOURCES = FileList.new do |fl|
-    TEST_SOURCES.each do |s|
-      if TAG and File.readlines(s).grep(Regexp.new(TAG)).size > 0
-        fl.include(s)
-      end
-    end
-  end
-
-  TAGGED_TEST_COMPILED = FileList.new do |fl|
-    TEST_SOURCES.each do |s|
-      if TAG and File.readlines(s).grep(Regexp.new(TAG)).size > 0
-        fl.include("#{BUILD_DIR}/#{s.ext('vim')}")
-      end
-    end
-  end
-
   desc 'All tasks'
   task :all => [:clean, :compile, :compile_tests, :test]
 
@@ -140,7 +124,7 @@ namespace :speckle do
 
   desc "Compile specs"
   task :compile_tests => [:build] do
-    get_test_sources.each do |t|
+    TEST_SOURCES.each do |t|
       verbose VERBOSE do
         puts "Compiling: #{t} "
         sh "bundle exec riml -c #{t} -I #{TEST_LIBS}"
@@ -179,28 +163,18 @@ namespace :speckle do
     puts 'Running tests: '
     puts
 
-    launch_vim
+    if TEST_COMPILED.length > 0
+      launch_vim
+    elsif TAG
+      puts "All tests were filtered out."
+    else
+      puts "No tests to run."
+    end
   end
 
   desc "Watch files for changes and run tests"
   task :watch do 
     puts '--- TODO ---'
-  end
-
-  def get_test_sources
-    if TAG
-      return TAGGED_TEST_SOURCES
-    else
-      return TEST_SOURCES
-    end
-  end
-
-  def get_test_compiled
-    if TAG
-      return TAGGED_TEST_COMPILED
-    else
-      return TEST_COMPILED
-    end
   end
 
   def get_vim_options
@@ -234,7 +208,7 @@ namespace :speckle do
       source #{SPECKLE_OUTPUT}
 CMD
 
-    get_test_compiled.each do |t|
+    TEST_COMPILED.each do |t|
       launch_cmd += <<CMD
       source #{t}
 CMD
