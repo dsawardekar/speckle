@@ -103,18 +103,11 @@ namespace :speckle do
   task :compile => [:build] do
     puts "Compiling: #{SPECKLE_MAIN}"
     verbose VERBOSE do
-      sh "bundle exec riml -c #{SPECKLE_SOURCE} -I #{SPECKLE_LIBS}"
-    end
-    verbose DEBUG do
-      mv "#{SPECKLE_TEMP_OUTPUT}", "#{SPECKLE_OUTPUT}"
+      sh "bundle exec riml -c #{SPECKLE_SOURCE} -I #{SPECKLE_LIBS} -o #{BUILD_DIR}"
     end
 
     verbose VERBOSE do
-      sh "bundle exec riml -c #{SPECKLE_DSL_SOURCE}"
-    end
-
-    verbose DEBUG do
-      mv "#{SPECKLE_DSL_TEMP_OUTPUT}", "#{SPECKLE_DSL_OUTPUT}"
+      sh "bundle exec riml -c #{SPECKLE_DSL_SOURCE} -o #{BUILD_DIR}"
     end
   end
 
@@ -127,13 +120,13 @@ namespace :speckle do
     TEST_SOURCES.each do |t|
       verbose VERBOSE do
         puts "Compiling: #{t} "
-        sh "bundle exec riml -c #{t} -I #{TEST_LIBS}"
+        sh "bundle exec riml -c #{t} -I #{TEST_LIBS} -o #{BUILD_DIR}"
       end
 
       spec_dir = "#{BUILD_DIR}/#{File.dirname(t)}"
       verbose DEBUG do
         mkdir_p "#{spec_dir}"
-        mv "#{File.basename(t).ext('vim')}", "#{spec_dir}"
+        mv "#{BUILD_DIR}/#{File.basename(t).ext('vim')}", "#{spec_dir}"
       end
     end
 
