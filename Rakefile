@@ -103,11 +103,11 @@ namespace :speckle do
   task :compile => [:build] do
     puts "Compiling: #{SPECKLE_MAIN}"
     verbose VERBOSE do
-      sh "bundle exec riml -c #{SPECKLE_SOURCE} -I #{SPECKLE_LIBS} -o #{BUILD_DIR}"
+      sh "bundle exec riml -c #{SPECKLE_SOURCE} -I #{SPECKLE_LIBS} -o #{SPECKLE_BUILD_DIR}"
     end
 
     verbose VERBOSE do
-      sh "bundle exec riml -c #{SPECKLE_DSL_SOURCE} -o #{BUILD_DIR}"
+      sh "bundle exec riml -c #{SPECKLE_DSL_SOURCE} -o #{SPECKLE_BUILD_DIR}"
     end
   end
 
