@@ -261,8 +261,14 @@ module Speckle
         expect('').to_not have_default_option('tag')
       end
 
-      it 'takes tag fram --tag' do
+      it 'takes tag from --tag' do
         expect(['--tag', 'focus']).to yield_option_value('tag', 'focus')
+      end
+
+      it 'does not have duplicate inputs', :foo => true do
+        env = Environment.new
+        opts = env.load(['spec', 'spec'])
+        expect(opts.inputs.length).to eq(1)
       end
 
     end
@@ -300,5 +306,6 @@ module Speckle
       end
 
     end
+
   end
 end
