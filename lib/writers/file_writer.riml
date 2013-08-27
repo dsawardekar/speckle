@@ -13,8 +13,8 @@ class FileWriter
   end
 
   defm writeln(line)
-    self.flush_line()
-    add(self.lines, line)
+    add(self.lines, "#{self.current_line}#{line}")
+    self.current_line = ''
   end
 
   defm flush_line()
