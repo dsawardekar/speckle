@@ -40,13 +40,12 @@ class SpecRunner
         result = 0
 
         try
-          timer.start()
-
           self.call_hook('before_each')
+          timer.start()
           eval("spec.#{method}()")
+          timer.stop()
           self.call_hook('after_each')
 
-          timer.stop()
           meta.set_duration(timer.get_duration())
 
           stats.inc_passes()
