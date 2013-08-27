@@ -1,4 +1,6 @@
 "" utils
+riml_include 'logger.riml'
+riml_include 'echo_log_writer.riml'
 riml_include 'spec_timer.riml'
 riml_include 'spec_meta.riml'
 riml_include 'statistician.riml'
@@ -27,6 +29,7 @@ riml_include 'file_writer.riml'
 riml_include 'console_writer.riml'
 riml_include 'buffer_writer.riml'
 riml_include 'writer_factory.riml'
+riml_include 'file_log_writer.riml'
 
 "" reporters
 riml_include 'base_reporter.riml'
@@ -86,6 +89,9 @@ class Speckle
     factory = new ReporterFactory()
     reporter = factory.get_reporter(self.get_reporter_name())
     reporter.set_writer(writer)
+
+    logger = get_logger()
+    logger.add_log_writer(reporter)
 
     return reporter
   end

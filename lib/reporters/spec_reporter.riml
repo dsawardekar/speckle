@@ -3,6 +3,7 @@ class SpecReporter < BaseReporter
   def initialize()
     super()
     self.indents = 0
+    self.log_buffer = []
   end
 
   defm write(msg)
@@ -25,12 +26,16 @@ class SpecReporter < BaseReporter
   defm on_spec_pass(meta, stats)
     duration_msg = self.get_duration_msg(meta)
     self.write("#{self.get_tick()} #{meta.get_sentence()} #{duration_msg}")
+    self.indent(2)
+    self.flush_log_buffer()
+    self.unindent(2)
   end
 
   defm on_spec_failure(meta, err, stats)
     self.write("#{self.get_cross()} #{self.to_red(meta.get_sentence())}")
     self.indent(2)
     self.write(self.to_red(err))
+    self.flush_log_buffer()
     self.unindent(2)
   end
 
@@ -53,6 +58,10 @@ class SpecReporter < BaseReporter
   defm write_epilogue_separator()
     self.writer.writeln('')
     super()
+  end
+
+  defm write_log_line(line)
+    self.write("log: #{line}")
   end
 
 end

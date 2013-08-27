@@ -13,25 +13,27 @@ class TAPReporter < BaseReporter
     duration_msg = self.get_duration_msg(meta)
     preamble = self.get_preamble('ok', stats.get_count(), meta.get_context())
     self.writer.writeln("#{preamble} ##{name} #{duration_msg}")
+    self.flush_log_buffer()
   end
 
   defm on_spec_failure(meta, err, stats)
     name = meta.get_sentence()
     preamble = self.get_preamble('not ok', stats.get_count(), meta.get_context())
     self.writer.writeln("#{preamble} ##{name} - #{err}")
+    self.flush_log_buffer()
   end
 
   defm on_spec_error(meta, err, stats)
     name = meta.get_sentence()
     preamble = self.get_preamble('not ok', stats.get_count(), meta.get_context())
     self.writer.writeln("#{preamble} ##{name} - #{err}")
+    self.flush_log_buffer()
   end
 
   defm on_spec_pending(meta, stats)
   end
 
   defm get_preamble(status, count, context)
-    ""status = status . repeat(' ', 6 - len(status))
     msg = "#{status} #{count} - #{context}"
     return msg
   end

@@ -9,5 +9,10 @@ class MinReporter < BaseReporter
   defm on_spec_error(meta, err, stats)
     self.on_spec_failure(meta, err, stats)
   end
+
+  defm write_epilogue_separator()
+    self.flush_log_buffer()
+    super()
+  end
   
 end
