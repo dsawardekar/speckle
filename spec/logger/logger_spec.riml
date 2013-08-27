@@ -1,0 +1,15 @@
+riml_include 'dsl.riml'
+
+class LoggerSpec
+  defm describe
+    return 'LoggerSpec'
+  end
+
+  defm it_logs_a_message
+    logger = get_logger()
+    logger.info('Hello World')
+    logger.debug('A debug message')
+    logger.warn('A test warning')
+    logger.error('An error warning')
+  end
+end

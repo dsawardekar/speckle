@@ -8,4 +8,5 @@ class SpeckleModeSpec
   defm it_has_speckle_mode
     expect(g:speckle_mode).to_be_true()
   end
+
 end

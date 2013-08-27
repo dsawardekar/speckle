@@ -4,6 +4,7 @@ class DotMatrixReporter < BaseReporter
     super()
     self.dots = 0
     self.line_buffer = []
+    self.log_messages = []
   end
 
   defm write(msg)
@@ -36,6 +37,8 @@ class DotMatrixReporter < BaseReporter
   end
 
   defm write_epilogue_separator()
+    self.flush_log_buffer()
+
     self.writer.writeln('')
     for line in self.line_buffer
       self.writer.writeln(line)
