@@ -190,6 +190,8 @@ namespace :speckle do
       cmd += "-u NONE -i NONE"
     end
 
+    cmd += " --cmd 'let g:speckle_mode = 1'"
+
     cmd
   end
 
