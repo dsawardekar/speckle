@@ -68,7 +68,6 @@ class Logger
 
   defm to_color(msg, level)
     color = self.colors[level]
-    echo "msg=#{msg}, color=#{color}"
     if color != 0
       return "[#{color}#{msg}[0m"
     else
