@@ -1,16 +1,30 @@
 require 'bundler/setup'
 require 'bundler/gem_tasks'
-require 'rspec/core/rake_task'
 
 desc 'Default task :compile_and_test'
 task :default => :test
 
-# :spec task from rspec
-desc "Run speckle's rspec tests"
-RSpec::Core::RakeTask.new(:spec)
+# We need the RSpec rake tasks to run spec
+# but we don't want users of speckle to need rspec
+# Eventually we want to switch from the cli calling
+# the Rakefile to the Rakefile calling the cli.
+begin
+  # :spec task from rspec
+  require 'rspec/core/rake_task'
+  desc "Run speckle's rspec tests"
+  RSpec::Core::RakeTask.new(:spec)
 
-desc 'Run rspec and speckle tests'
-task :test => [:spec, 'speckle:vim_version', 'speckle:compile_and_test']
+  desc 'Run rspec and speckle tests'
+  task :test => [:spec, 'speckle:vim_version', 'speckle:compile_and_test']
+rescue LoadError
+  if ENV.has_key?('DEBUG')
+    puts 'rspec/core/rake_task not found'
+  end
+
+  # no spec task in chain without rspec
+  desc 'Run rspec and speckle tests'
+  task :test => ['speckle:vim_version', 'speckle:compile_and_test']
+end
 
 desc 'Clean temporary files'
 task :clean => ['speckle:clean']
@@ -175,6 +189,8 @@ namespace :speckle do
     if SKIP_VIMRC
       cmd += "-u NONE -i NONE"
     end
+
+    cmd += " --cmd 'let g:speckle_mode = 1'"
 
     cmd
   end

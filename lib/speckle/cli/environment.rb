@@ -128,7 +128,7 @@ module Speckle
             end
           end
 
-          options.inputs = args
+          options.inputs = args.uniq
         rescue OptionParser::InvalidOption => e
           options.error = e
           options.action = :show_invalid_option

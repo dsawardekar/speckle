@@ -1,6 +1,7 @@
 class BaseReporter
   def initialize()
     self.colorize_output = true
+    self.log_buffer = []
   end
 
   defm set_writer(writer)
@@ -122,5 +123,34 @@ class BaseReporter
     return self.to_red(self.get_cross_icon())
   end
 
+  " log writer interface "
+  defm get_colorize
+    return self.get_colorize_output()
+  end
+
+  defm log(message)
+    add(self.log_buffer, message)
+  end
+
+  defm has_logs
+    return len(self.log_buffer) > 0
+  end
+
+  defm flush_log_buffer
+    if self.has_logs()
+      self.writer.writeln('')
+
+      for line in self.log_buffer
+        self.write_log_line(line)
+      end
+
+      self.writer.writeln('')
+      self.log_buffer = []
+    end
+  end
+
+  defm write_log_line(line)
+    self.writer.writeln("log: #{line}")
+  end
 end
 

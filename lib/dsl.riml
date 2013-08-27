@@ -4,7 +4,6 @@ if !exists("g:speckle_env")
   g:speckle_env.assertions = 0
 end
 
-
 def expect(actual)
   env = g:speckle_env
   env.actual = actual
@@ -27,3 +26,13 @@ def define_matcher(ok_name, not_ok_name, matcher)
   matchers = get_matchers()
   matchers.define_pair(ok_name, not_ok_name, matcher)
 end
+
+def get_logger()
+  unless exists('g:logger')
+    g:logger = g:LoggerConstructor()
+  end
+
+  return g:logger
+end
+
+logger = get_logger()

@@ -1,0 +1,27 @@
+class FileLogWriter
+  def initialize
+    self.writer = new FileWriter()
+    self.colorize = true
+  end
+
+  defm set_log_file(log_file)
+    self.writer.set_output_file(log_file)
+  end
+
+  defm set_colorize(colorize)
+    self.colorize = colorize
+  end
+
+  defm get_colorize()
+    return self.colorize
+  end
+
+  defm log(message)
+    self.writer.writeln(message)
+  end
+
+  defm flush()
+    self.writer.flush()
+  end
+end
+
