@@ -40,7 +40,6 @@ class SpecRunner
         result = 0
 
         try
-
           self.call_hook('before_each')
           timer.start()
           eval("spec.#{method}()")
