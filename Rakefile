@@ -4,6 +4,10 @@ require 'bundler/gem_tasks'
 desc 'Default task :compile_and_test'
 task :default => :test
 
+# We need the RSpec rake tasks to run spec
+# but we don't want users of speckle to need rspec
+# Eventually we want to switch from the cli calling
+# the Rakefile to the Rakefile calling the cli.
 begin
   # :spec task from rspec
   require 'rspec/core/rake_task'
