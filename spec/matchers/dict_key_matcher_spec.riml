@@ -16,4 +16,5 @@ class DictKeyMatcherSpec
     box = {}
     expect(box).to_not_have_key('red')
   end
+
 end
