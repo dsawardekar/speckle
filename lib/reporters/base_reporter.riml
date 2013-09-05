@@ -152,5 +152,20 @@ class BaseReporter
   defm write_log_line(line)
     self.writer.writeln("log: #{line}")
   end
+
+  " stacktrack "
+  defm print_stacktrace(err)
+    if has_key(err, 'is_vim_error')
+      lines = err.get_stacktrace()
+
+      for line in lines
+        self.write_stacktrace_line(line)
+      end
+    end
+  end
+
+  defm write_stacktrace_line(line)
+    self.writer.writeln(line)
+  end
 end
 

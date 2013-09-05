@@ -53,21 +53,25 @@ class SpecRunner
         catch /Unknown function.*expect/
           did_fail = true
           stats.inc_failures()
-          exception = 'DSLError: expect() not found, dsl.riml may not be included'
-          reporter.on_spec_failure(meta, exception, stats)
+          error = new DSLError('expect() not found, dsl.riml may not be included')
+          reporter.on_spec_failure(meta, error, stats)
         catch /Unknown function.*define_matcher/
           did_fail = true
           stats.inc_failures()
-          exception = 'DSLError: define_matcher() not found, dsl.riml may not be included'
-          reporter.on_spec_failure(meta, exception, stats)
+          error = new DSLError('define_matcher() not found, dsl.riml may not be included')
+          reporter.on_spec_failure(meta, error, stats)
         catch /^AssertionError/
           did_fail = true
           stats.inc_failures()
-          reporter.on_spec_failure(meta, v:exception, stats)
+
+          " exeption carries the assertion failure message "
+          error = new AssertionError(v:exception)
+          reporter.on_spec_failure(meta, error, stats)
         catch /.*/
           did_fail = true
           stats.inc_errors()
-          reporter.on_spec_error(meta, v:exception, stats)
+          error = new VimError(v:exception)
+          reporter.on_spec_error(meta, error, stats)
         end
 
         reporter.on_spec_end(meta, stats)
@@ -113,4 +117,53 @@ class SpecRunner
     end
   end
 
+end
+
+class SpecError
+  def initialize(message)
+    self.is_spec_error = true
+    self.message = message
+
+    self.exception = v:exception
+    self.throwpoint = v:throwpoint
+  end
+
+  defm get_message()
+    return self.message
+  end
+
+  defm get_stacktrace()
+    unless has_key(self, 'stacktrace')
+      self.build_stacktrace()
+    end
+
+    return self.stacktrace
+  end
+
+  defm build_stacktrace()
+    str = substitute(self.throwpoint, '\v(function )', '', '')
+    self.stacktrace = split(str, '\.\.')
+    self.stacktrace = map(self.stacktrace, '"at " . v:val')
+  end
+end
+
+class DSLError < SpecError
+  def initialize(message)
+    super(message)
+    self.is_dsl_error = true
+  end
+end
+
+class AssertionError < SpecError
+  def initialize(message)
+    super(message)
+    self.is_assertion_error = true
+  end
+end
+
+class VimError < SpecError
+  def initialize(message)
+    super(message)
+    self.is_vim_error = true
+  end
 end
