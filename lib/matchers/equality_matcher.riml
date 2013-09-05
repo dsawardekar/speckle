@@ -1,13 +1,76 @@
 class EqualityMatcher
+  def initialize
+    types = []
+    add(types, 'Number')
+    add(types, 'String')
+    add(types, 'Funcref')
+    add(types, 'List')
+    add(types, 'Dictionary')
+    add(types, 'Float')
+
+    self.types = types
+  end
+
   defm match(expected, actual)
-    return actual == expected
+    self.type_mismatch = false
+
+    type_expected = type(expected)
+    type_actual = type(actual)
+
+    if type_expected != type_actual
+      self.type_mismatch = true
+      return false
+    end
+
+    return expected == actual
   end
 
   defm failure_message_for_match(expected, actual)
-    return "expected “#{actual}” to equal “#{expected}”"
+    if self.type_mismatch
+      return self.type_mismatch_message(expected, actual)
+    end
+
+    expected_str = self.stringify(expected)
+    actual_str = self.stringify(actual)
+
+    return "expected “#{actual_str}” to equal “#{expected_str}”"
   end
 
   defm failure_message_for_mismatch(expected, actual)
-    return "expected “#{actual}” to not equal “#{expected}”"
+    if self.type_mismatch
+      return self.type_mismatch_message(expected, actual)
+    end
+
+    expected_str = self.stringify(expected)
+    actual_str = self.stringify(actual)
+
+    return "expected “#{actual_str}” to not equal “#{expected_str}”"
   end
+
+  defm type_mismatch_message(expected, actual)
+    actual_type = self.typeof(actual)
+    expected_type = self.typeof(expected)
+
+    return "type mismatch, actual(#{string(actual)}) is “#{actual_type}”, expected(#{string(expected)}) is “#{expected_type}”"
+  end
+
+  " helpers "
+  defm typeof(variable)
+    return self.type_to_str(type(variable))
+  end
+
+  defm type_to_str(num)
+    return self.types[num]
+  end
+
+  defm stringify(value)
+    value_type = type(value)
+
+    if value_type == type('') || value_type == type(1)
+      return value
+    else
+      return string(value)
+    end
+  end
+
 end
