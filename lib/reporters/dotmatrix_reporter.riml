@@ -30,7 +30,7 @@ class DotMatrixReporter < BaseReporter
     add(self.line_buffer, self.to_red("#{context} ##{name}"))
     add(self.line_buffer, self.to_red("    #{err.get_message()}"))
     
-    self.print_stacktrace()
+    self.print_stacktrace(err)
 
     add(self.line_buffer, '')
   end
