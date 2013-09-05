@@ -28,4 +28,34 @@ class EqualityMatcherSpec
   defm it_can_check_inequality_with_alias_neq
     expect('foo').to_neq('bar')
   end
+
+  defm verify_type_mismatch(a, b)
+    try
+      expect(a).to_equal(b)
+      caught_error = false
+    catch /type mismatch/
+      ""get_logger().info(v:exception)
+      caught_error = true
+    end
+
+    expect(caught_error).to_be_true()
+  end
+
+  defm it_can_report_type_mismatch
+    self.verify_type_mismatch(100, 'one hundred')
+    self.verify_type_mismatch(1, '1')
+    self.verify_type_mismatch(0, '0')
+    self.verify_type_mismatch({}, [])
+    self.verify_type_mismatch({}, 'foo')
+  end
+
+  defm it_can_check_equality_of_lists
+    expect(['a', 'b']).to_not_equal(['a', 'b', 'c'])
+    expect(['a', 'b']).to_equal(['a', 'b'])
+  end
+
+  defm it_can_check_equality_of_dicts
+    expect({'foo': 10}).to_not_equal({'bar': 20})
+    expect({'foo': { 'bar': 10 }}).to_equal({'foo': { 'bar': 10 }})
+  end
 end
