@@ -1,0 +1,15 @@
+riml_include 'dsl.riml'
+
+class StacktraceSpec
+  defm describe
+    return 'StacktraceSpec'
+  end
+
+  defm it_can_display_stacktrace_stacktrace
+    unless exists('g:speckle_tag') && g:speckle_tag == 'stacktrace'
+      return
+    end
+
+    some_unknown_function('a')
+  end
+end
