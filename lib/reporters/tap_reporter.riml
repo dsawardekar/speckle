@@ -19,15 +19,13 @@ class TAPReporter < BaseReporter
   defm on_spec_failure(meta, err, stats)
     name = meta.get_sentence()
     preamble = self.get_preamble('not ok', stats.get_count(), meta.get_context())
-    self.writer.writeln("#{preamble} ##{name} - #{err}")
+    self.writer.writeln("#{preamble} ##{name} - #{err.get_message()}")
+    self.print_stacktrace(err)
     self.flush_log_buffer()
   end
 
   defm on_spec_error(meta, err, stats)
-    name = meta.get_sentence()
-    preamble = self.get_preamble('not ok', stats.get_count(), meta.get_context())
-    self.writer.writeln("#{preamble} ##{name} - #{err}")
-    self.flush_log_buffer()
+    self.on_spec_failure(meta, err, stats)
   end
 
   defm on_spec_pending(meta, stats)
@@ -36,5 +34,9 @@ class TAPReporter < BaseReporter
   defm get_preamble(status, count, context)
     msg = "#{status} #{count} - #{context}"
     return msg
+  end
+
+  defm write_stacktrace_line(line)
+    self.writer.writeln("  #{line}")
   end
 end

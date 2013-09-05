@@ -28,7 +28,10 @@ class DotMatrixReporter < BaseReporter
     name = meta.get_sentence()
     context = meta.get_context()
     add(self.line_buffer, self.to_red("#{context} ##{name}"))
-    add(self.line_buffer, self.to_red("    #{err}"))
+    add(self.line_buffer, self.to_red("    #{err.get_message()}"))
+    
+    self.print_stacktrace(err)
+
     add(self.line_buffer, '')
   end
 
@@ -45,6 +48,10 @@ class DotMatrixReporter < BaseReporter
     end
 
     self.writer.writeln("")
+  end
+
+  defm write_stacktrace_line(line)
+    add(self.line_buffer, "       #{line}")
   end
 
 end

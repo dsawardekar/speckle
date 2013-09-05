@@ -3,7 +3,8 @@ class MinReporter < BaseReporter
   defm on_spec_failure(meta, err, stats)
     name = meta.get_sentence()
     context = meta.get_context()
-    self.writer.writeln(self.to_red("#{context} ##{name} - #{err}"))
+    self.writer.writeln(self.to_red("#{context} ##{name} - #{err.get_message()}"))
+    self.print_stacktrace(err)
   end
   
   defm on_spec_error(meta, err, stats)
@@ -13,6 +14,10 @@ class MinReporter < BaseReporter
   defm write_epilogue_separator()
     self.flush_log_buffer()
     super()
+  end
+
+  defm write_stacktrace_line(line)
+    self.writer.writeln("  #{line}")
   end
   
 end
