@@ -47,7 +47,7 @@ riml_include 'runner.riml'
 riml_include 'expectation.riml'
 
 "" main entry point
-class Speckle
+class g:Speckle
   defm configure()
     options_map = {
       \ 'output_file': '"speckle.log"',

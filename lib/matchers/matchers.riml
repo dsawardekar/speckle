@@ -1,4 +1,4 @@
-class Matchers
+class g:Matchers
   def initialize()
     self.matchers = {}
   end
