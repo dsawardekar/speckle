@@ -1,12 +1,12 @@
 class ReporterFactory
   defm get_reporter(reporter_name)
-    if a:reporter_name == 'spec'
+    if reporter_name == 'spec'
       return new SpecReporter()
-    elseif a:reporter_name == 'min'
+    elseif reporter_name == 'min'
       return new MinReporter() 
-    elseif a:reporter_name == 'tap'
+    elseif reporter_name == 'tap'
       return new TAPReporter()
-    elseif a:reporter_name == 'dot'
+    elseif reporter_name == 'dot'
       return new DotMatrixReporter()
     else
       return new SpecReporter()
