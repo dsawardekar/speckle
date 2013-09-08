@@ -1,4 +1,4 @@
-class MatchTester
+class g:MatchTester
 
   defm test_from_env(matcher_name, expected)
     env = g:speckle_env
@@ -8,7 +8,7 @@ class MatchTester
     matcher = match_item.matcher
     actual = env.actual
 
-    tester = new MatchTester()
+    tester = new g:MatchTester()
     tester.test(matcher, negate, a:expected, actual)
   end
 

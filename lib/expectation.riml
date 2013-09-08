@@ -1,4 +1,4 @@
-class Expectation
+class g:Expectation
 
   def initialize(actual)
     self.actual = actual
@@ -7,7 +7,7 @@ class Expectation
   defm load(matchers)
     matchers.load_defaults()
 
-    match_tester = new MatchTester()
+    match_tester = new g:MatchTester()
     match_items = matchers.get_match_items()
 
     for match_item in match_items
