@@ -1,0 +1,53 @@
+riml_include 'dsl.riml'
+
+class BeforeErrorHookSpec_err
+  defm describe
+    return 'BeforeErrorHookSpec'
+  end
+
+  defm before
+    a = c
+  end
+
+end
+
+class BeforeEachHookSpec_err
+  defm describe
+    return 'Before_each hooks'
+  end
+
+  defm before_each
+    a = b
+  end
+
+  defm it_has_stuff_from_before_each
+    expect(self.stuff).to_equal('foo')
+  end
+
+end
+
+class AfterErrorHookSpec_err
+  defm describe
+    return 'AfterErrorHookSpec'
+  end
+
+  defm after
+    a = b
+  end
+
+end
+
+class AfterEachHookSpec_err
+  defm describe
+    return 'Before_each hooks'
+  end
+
+  defm after_each
+    a = b
+  end
+
+  defm it_has_stuff_from_before_each
+    expect(self.stuff).to_equal('foo')
+  end
+
+end
