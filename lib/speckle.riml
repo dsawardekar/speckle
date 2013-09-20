@@ -37,6 +37,7 @@ riml_include 'spec_reporter.riml'
 riml_include 'min_reporter.riml'
 riml_include 'tap_reporter.riml'
 riml_include 'dotmatrix_reporter.riml'
+riml_include 'fivemat_reporter.riml'
 riml_include 'reporter_factory.riml'
 
 "" runners

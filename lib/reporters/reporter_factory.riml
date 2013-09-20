@@ -8,6 +8,8 @@ class ReporterFactory
       return new TAPReporter()
     elseif reporter_name == 'dot'
       return new DotMatrixReporter()
+    elseif reporter_name == 'fivemat'
+      return new FivematReporter()
     else
       return new SpecReporter()
     end
