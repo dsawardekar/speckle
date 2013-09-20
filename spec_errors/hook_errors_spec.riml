@@ -6,7 +6,7 @@ class BeforeErrorHookSpec_err
   end
 
   defm before
-    a = b
+    a = c
   end
 
 end
