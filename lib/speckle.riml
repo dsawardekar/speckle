@@ -138,7 +138,7 @@ class g:Speckle
 
     functions = ''
     :redir => functions
-    :silent function /SpecConstructor$/
+    :silent function /Spec\(_.*Constructor\|Constructor\)$/
     :redir END
 
     self.add_specs(runner, functions)

@@ -25,7 +25,13 @@ class SpecRunner
     did_fail = false
     context = self.call_hook('describe')
     reporter.on_context_start(context, stats)
-    self.call_hook('before')
+
+    try
+      self.call_hook('before')
+    catch /.*/
+      self.report_hook_error('before', context, reporter, stats)
+      self.stopped = true
+    end
 
     for method in keys(spec)
       if self.stopped
@@ -84,8 +90,25 @@ class SpecRunner
       end
     end
 
-    self.call_hook('after')
+    try
+      unless self.stopped
+        self.call_hook('after')
+      end
+    catch /.*/
+      self.report_hook_error('after', context, reporter, stats)
+    end
+
     reporter.on_context_end(context, stats)
+  end
+
+  defm report_hook_error(hook, context, reporter, stats)
+    meta = new SpecMeta(context, hook)
+
+    reporter.on_spec_start(meta, stats)
+
+    stats.inc_errors()
+    error = new VimError(v:exception)
+    reporter.on_spec_error(meta, error, stats)
   end
 
   defm call_hook(hook)
@@ -104,7 +127,7 @@ class SpecRunner
     return method =~ '^it'
   end
 
-  defm is_method_tagged(method)
+  defm is_tagged(method)
     return method =~ "_#{self.tag}$"
   end
 
@@ -112,7 +135,7 @@ class SpecRunner
     if self.tag == ''
       return self.is_test_method(method)
     else
-      return self.is_test_method(method) && self.is_method_tagged(method)
+      return self.is_test_method(method) && self.is_tagged(method)
     end
   end
 
