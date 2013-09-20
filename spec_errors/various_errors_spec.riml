@@ -1,0 +1,29 @@
+riml_include 'dsl.riml'
+
+class VariousErrorsSpec
+
+  defm describe
+    return 'VariousErrorsSpec'
+  end
+
+  defm it_has_unknown_variable
+    get_logger().info('unknown variable')
+    a = b
+  end
+
+  defm it_has_custom_throw
+    get_logger().info('custom throw')
+    throw 'some error'
+  end
+
+  defm it_has_unknown_function
+    get_logger().error('unknown_function')
+    CallFooFunction()
+  end
+
+  defm it_has_assertion_error
+    get_logger().info('regular assertion')
+    expect(true).to_be_false()
+  end
+
+end

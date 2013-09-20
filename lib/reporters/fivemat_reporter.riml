@@ -1,0 +1,122 @@
+class FivematReporter < BaseReporter
+
+  def initialize()
+    super()
+    self.indents = 0
+    self.log_buffer = []
+    self.current_index = 0
+    self.error_buffer = []
+  end
+
+  defm writeln(msg)
+    line = "#{self.indent_to_str()}#{msg}"
+    self.writer.writeln(line)
+  end
+
+  defm write(msg)
+    line = "#{self.indent_to_str()}#{msg}"
+    self.writer.write(line)
+  end
+
+  defm write_errorln(msg)
+    add(self.error_buffer, self.indent_to_str() . msg)
+  end
+
+  defm has_error_lines
+    return len(self.error_buffer) > 0
+  end
+
+  defm flush_error_buffer
+    if self.has_error_lines()
+      for line in self.error_buffer
+        self.writeln(line)
+      end
+
+      self.error_buffer = []
+    end
+  end
+
+  defm on_start(stats)
+  end
+
+  defm on_context_start(context, stats)
+    self.current_index = 0
+    self.write("#{context} ")
+  end
+
+  defm on_context_end(context, stats)
+    self.writeln('')
+    self.flush_error_buffer()
+  end
+
+  defm on_spec_pass(meta, stats)
+    duration_msg = self.get_duration_msg(meta)
+    self.write('.')
+    self.flush_log_buffer()
+  end
+
+  defm show_error(type, meta, err, stats)
+    char = type[0]
+    self.write(self.to_red(char))
+
+    self.indent(1)
+
+    self.write_errorln("#{self.current_index}) #{type}: #{meta.get_sentence()}")
+
+    self.indent(1)
+    self.write_errorln(" ". self.to_red(err.get_message()))
+    self.indent(1)
+    self.print_stacktrace(err)
+    self.flush_log_buffer()
+    self.unindent(3)
+    self.write_errorln('')
+  end
+
+  defm on_spec_failure(meta, err, stats)
+    self.current_index += 1
+    self.show_error('Failure', meta, err, stats)
+  end
+
+  defm on_spec_error(meta, err, stats)
+    self.current_index += 1
+    self.show_error('Error', meta, err, stats)
+  end
+
+  defm indent_to_str()
+    return repeat("  ", self.indents)
+  end
+
+  defm indent(size)
+    self.indents += size
+  end
+
+  defm unindent(size)
+    self.indents -= size
+  end
+
+  defm write_epilogue_separator()
+    self.writer.writeln('')
+    super()
+  end
+
+  defm write_log_line(line)
+    self.write_errorln(" log: #{line}")
+  end
+  
+  defm write_stacktrace_line(line)
+    self.write_errorln(" " . line)
+  end
+
+  defm flush_log_buffer
+    if self.has_logs()
+      self.write_errorln('')
+
+      for line in self.log_buffer
+        self.write_log_line(line)
+      end
+
+      self.log_buffer = []
+    end
+  end
+
+end
