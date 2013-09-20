@@ -42,7 +42,7 @@ class SpecRunner
         try
           self.call_hook('before_each')
           timer.start()
-          eval("spec.#{method}()")
+          res = call(self.spec[method], [], self.spec)
           timer.stop()
           self.call_hook('after_each')
 
@@ -89,9 +89,8 @@ class SpecRunner
   end
 
   defm call_hook(hook)
-    spec = self.spec
-    if has_key(spec, hook)
-      return eval("spec.#{hook}()");
+    if has_key(self.spec, hook)
+      return call(self.spec[hook], [], self.spec)
     else
       return "Undefined hook: #{hook}"
     end
