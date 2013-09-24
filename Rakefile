@@ -131,20 +131,38 @@ namespace :speckle do
 
   desc "Compile specs"
   task :compile_tests => [:build] do
-    TEST_SOURCES.each do |t|
-      verbose VERBOSE do
-        puts "Compiling: #{t} "
-        sh "bundle exec riml -c #{t} -I #{TEST_LIBS} -o #{BUILD_DIR}"
-      end
+    compile_test_files(TEST_SOURCES, TEST_LIBS, BUILD_DIR)
+    puts
+  end
 
-      spec_dir = "#{BUILD_DIR}/#{File.dirname(t)}"
-      verbose DEBUG do
-        mkdir_p "#{spec_dir}"
-        mv "#{BUILD_DIR}/#{File.basename(t).ext('vim')}", "#{spec_dir}"
+  def compile_test_files(files, libs, build_dir)
+    require 'riml'
+
+    opts = get_riml_opts(libs, build_dir)
+    verbose true do
+      #sh "bundle exec riml -c #{t} -I #{TEST_LIBS} -o #{BUILD_DIR}"
+      TEST_SOURCES.each do |t|
+        puts "Compiling: #{t} "
+        Riml.compile_files(t, opts)
+
+        spec_dir = "#{BUILD_DIR}/#{File.dirname(t)}"
+        verbose DEBUG do
+          mkdir_p "#{spec_dir}"
+          mv "#{BUILD_DIR}/#{File.basename(t).ext('vim')}", "#{spec_dir}"
+        end
       end
     end
+  end
 
-    puts
+  def get_riml_opts(libs, build_dir)
+    Riml.include_path = libs
+
+    opts = {
+      :readable => true,
+      :output_dir => build_dir
+    }
+
+    return opts
   end
 
   desc "Compile and test specs"
