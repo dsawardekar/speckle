@@ -23,7 +23,13 @@ class SpecRunner
   defm start(reporter, stats)
     spec = self.spec
     did_fail = false
-    context = self.call_hook('describe')
+    if has_key(spec, 'describe')
+      context = self.call_hook('describe')
+    elseif has_key(spec, 'spec_name')
+      context = spec.spec_name
+    else
+      context = 'Unknown Spec'
+    end
     reporter.on_context_start(context, stats)
 
     try

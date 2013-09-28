@@ -120,7 +120,7 @@ class g:Speckle
   defm get_bail
     return g:speckle_bail
   end
-  
+
   defm get_tag
     return g:speckle_tag
   end
@@ -156,7 +156,12 @@ class g:Speckle
     map(classes, "substitute(v:val, 'function ', '', '')")
 
     for klass in classes
-      eval("a:runner.add(#{klass})")
+      klass_instance = eval("a:runner.add(#{klass})")
+      res = matchlist(klass, '\v%(\<SNR\>\d+_)?(.*)SpecConstructor\(\)$')
+      if len(res) >= 2
+        spec_name = res[1]
+        klass_instance.spec_name = spec_name
+      end
     end
   end
 end
