@@ -4,6 +4,7 @@ module Speckle
 
     require 'optparse'
     require 'ostruct'
+    require 'find'
 
     class Environment
       include Loader
@@ -94,7 +95,7 @@ module Speckle
           opts.on('-v', '--verbose', 'Display verbose output') do
             options.verbose = true
           end
-          
+
           opts.on('-D', '--debug', 'Display debug output') do
             options.verbose = true
             options.debug = true
@@ -140,14 +141,30 @@ module Speckle
           options.action = :show_parser_error
         end
 
+        if action_needs_args?(options.action) and options.libs.nil?
+          options.libs = build_riml_path(['lib', 'spec'])
+        end
+
         options
       end
 
       def action_needs_args?(action)
         [:compile_and_test, :compile, :test].include? action
       end
-    end
 
+      def build_riml_path(dirs, pattern = /.*\.riml$/, spec_pattern = /.*_spec\.riml$/)
+        libs = []
+        dirs.each do |dir|
+          Find.find(dir) do |path|
+            if path =~ pattern && path !~ spec_pattern
+              libs << File.dirname(path)
+            end
+          end
+        end
+
+        libs.uniq.join(':')
+      end
+    end
 
   end
 end
