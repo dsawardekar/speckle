@@ -1,0 +1,7 @@
+riml_include 'dsl.riml'
+
+class MySpecWithoutDescribeSpec
+  defm it_will_work_too
+    expect(true).to_be_true()
+  end
+end

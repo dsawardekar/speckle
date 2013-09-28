@@ -25,6 +25,7 @@ class Runner
 
   defm add(spec)
     add(self.specs, spec)
+    return spec
   end
 
   defm start(reporter, stats)

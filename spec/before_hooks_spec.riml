@@ -35,4 +35,3 @@ class BeforeEachHookSpec
     expect(self.stuff).to_equal('foo')
   end
 end
-
