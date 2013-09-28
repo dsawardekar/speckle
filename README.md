@@ -148,7 +148,7 @@ end
 To write matcher to check if a person has the correct name we can
 write a `PersonNameMatcher`. The class must implement the methods, `match`, `failure_message_for_match` and `failure_message_for_mismatch` as shown below.
 
-```riml
+```ruby
 class PersonNameMatcher
   defm match(expected, actual)
     self.result = actual.get_name()
