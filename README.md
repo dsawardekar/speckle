@@ -1,5 +1,4 @@
-Speckle
-===
+## Speckle
 
 Behaviour driven development framework for testing Vim plugins written in [Riml][1].
 
@@ -17,13 +16,11 @@ closing the launched vim instance.
 
 [1]:https://github.com/luke-gru/riml
 
-Installation
-===
+## Installation
 
     $ gem install speckle
 
-Basic Usage
-===
+## Basic Usage
 
 Here's an example using Speckle.
 
@@ -70,8 +67,7 @@ EqualityMatcher #it can check equality of strings
 Passed: 0, Failures: 1, Errors: 0, Assertions: 0
 ```
 
-Matchers
-===
+## Matchers
 
 ### Equivalence
 
@@ -185,8 +181,7 @@ defm it_can_check_for_negation_of_persons_name
 end
 ```
 
-Hooks
-===
+## Hooks
 
 Speckle supports `before`, `before_each`, `after` and `after_each` hooks
 that will be run before/after the entire suite or before/after every test.
@@ -205,8 +200,7 @@ defm after_each
 end
 ```
 
-Logging (alternate to echomsg)
-===
+## Logging (alternate to echomsg)
 
 Speckle provides a logger that captures output messages without
 halting execution of tests. This allows development of vim plugins
@@ -234,8 +228,7 @@ LoggerSpec
 
 ```
 
-Stacktraces
-===
+## Stacktraces
 
 Another useful feature of Speckle is it displays stacktraces in a
 meaningful form to help with debugging.
@@ -259,8 +252,7 @@ VariousErrorsSpec #it has unknown function
        at <SNR>144_s:VariousErrorsSpec_it_has_unknown_function, line 2
 ```
 
-Isolated Testing
-===
+## Isolated Testing
 
 Speckle can be made to run only specific tests using the `--grep` option. For example, to only run tests in the `spec/models` folder use
 
@@ -279,8 +271,7 @@ And run the test with,
 
 Both these flags can be combined to limit the tests run.
 
-Complete Usage
-===
+## Complete Usage
 
     $ speckle [options] [file(s) OR directory]
     -a, --all                        Compile and run tests (default)
@@ -309,3 +300,7 @@ Options:
 1. Speckle uses [git flow](https://github.com/nvie/gitflow) based branching model.
 2. Pull requests should go against the `develop` branch.
 3. Try to include failing tests if possible.
+
+## License
+
+MIT License. Copyright (c) 2013 Darshan Sawardekar.
