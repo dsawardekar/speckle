@@ -12,7 +12,7 @@ For people unfamiliar with `Riml`. [Riml][1] is a programming language that comp
 Speckle uses `Riml`s object-oriented constructs to provide
 a BDD testing framework for Riml. You can use it for both unit testing and functional testing. Using Riml and Speckle you can write Vim plugins using common OOP software idioms and have the same familar tools available in your development workflow.
 
-Speckle is both a test compiler and test execution engine. It does compilation of the `_riml` specs with [Riml][1] and runs them in a Vim instance, capturing assertions, stacktraces and errors and reports them back after
+Speckle is both a test compiler and test execution engine. It does compilation of the `_spec.riml` specs with [Riml][1] and runs them in a Vim instance, capturing assertions, stacktraces and errors and reports them back after
 closing the launched vim instance.
 
 [1]:https://github.com/luke-gru/riml
