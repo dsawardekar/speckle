@@ -171,7 +171,7 @@ namespace :speckle do
       Rake::Task['speckle:test'].invoke
     end
   end
-  
+
   desc 'Shows vim --version'
   task :vim_version do
     if CI
@@ -198,14 +198,14 @@ namespace :speckle do
   end
 
   desc "Watch files for changes and run tests"
-  task :watch do 
+  task :watch do
     puts '--- TODO ---'
   end
 
   def get_vim_options
     cmd = ''
     if SKIP_VIMRC
-      cmd += "-u NONE -i NONE"
+      cmd += "-u NONE -i NONE --cmd ':set nocp'"
     end
 
     cmd += " --cmd 'let g:speckle_mode = 1'"
