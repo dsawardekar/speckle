@@ -1,20 +1,17 @@
-## Speckle
+## Speckle [![Build Status][1]][2] [![Code Climate][3]][4] [![Dependency Status][6]][7]
 
-Behaviour driven development framework for testing Vim plugins written in [Riml][1].
-
-[![Build Status](https://travis-ci.org/dsawardekar/speckle.png)](https://travis-ci.org/dsawardekar/speckle)
+Behaviour driven development framework for testing Vim plugins written in [Riml][5].
 
 ### About Riml
-For people unfamiliar with `Riml`. [Riml][1] is a programming language that compiles to Vimscript. It's constructs are very similar to languages like `Ruby` and `Coffeescript`. It also provides a layer of abstraction to write OOP code that is converted to Vimscript's Funcref prototype chains.
+For people unfamiliar with `Riml`. [Riml][5] is a programming language that compiles to Vimscript. It's constructs are very similar to languages like `Ruby` and `Coffeescript`. It also provides a layer of abstraction to write OOP code that is converted to Vimscript's Funcref prototype chains.
 
 ### How Speckle works
 Speckle uses `Riml`s object-oriented constructs to provide
 a BDD testing framework for Riml. You can use it for both unit testing and functional testing. Using Riml and Speckle you can write Vim plugins using common OOP software idioms and have the same familar tools available in your development workflow.
 
-Speckle is both a test compiler and test execution engine. It does compilation of the `_spec.riml` specs with [Riml][1] and runs them in a Vim instance, capturing assertions, stacktraces and errors and reports them back after
+Speckle is both a test compiler and test execution engine. It does compilation of the `_spec.riml` specs with [Riml][5] and runs them in a Vim instance, capturing assertions, stacktraces and errors and reports them back after
 closing the launched vim instance.
 
-[1]:https://github.com/luke-gru/riml
 
 ## Installation
 
@@ -304,3 +301,11 @@ Options:
 ## License
 
 MIT License. Copyright (c) 2013 Darshan Sawardekar.
+
+[1]: https://travis-ci.org/dsawardekar/speckle.png
+[2]: https://travis-ci.org/dsawardekar/speckle
+[3]: https://codeclimate.com/github/dsawardekar/speckle.png
+[4]: https://codeclimate.com/github/dsawardekar/speckle
+[5]: https://github.com/luke-gru/riml
+[6]: https://gemnasium.com/dsawardekar/speckle.png
+[7]: https://gemnasium.com/dsawardekar/speckle
