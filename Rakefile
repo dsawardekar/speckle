@@ -205,7 +205,7 @@ namespace :speckle do
   def get_vim_options
     cmd = ''
     if SKIP_VIMRC
-      cmd += "-u NONE -i NONE --cmd ':set nocp'"
+      cmd += "-u NONE -i NONE --cmd ':set nocp | let g:speckle_nocp_mode = 1'"
     end
 
     cmd += " --cmd 'let g:speckle_mode = 1'"
