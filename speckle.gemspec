@@ -21,11 +21,11 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.9.2'
 
-  s.add_dependency 'riml', '~> 0.3.2'
+  s.add_dependency 'riml', '~> 0.3.3'
   s.add_dependency 'rake', '~> 10.1.0'
   s.add_dependency 'bundler', '~> 1.3'
 
-  s.add_development_dependency 'rspec-core', '~> 2.14.0' 
+  s.add_development_dependency 'rspec-core', '~> 2.14.0'
   s.add_development_dependency 'rspec-expectations', '~> 2.14.0'
   s.add_development_dependency 'rspec-mocks', '~> 2.14.0'
 
