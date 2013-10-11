@@ -103,7 +103,7 @@ end
 
 module Speckle
   module CLI
-    
+
     describe 'Main options basics' do
 
       it 'defaults to compile_and_test without args' do
@@ -129,7 +129,7 @@ module Speckle
 
     describe 'Source path defaults' do
 
-      it 'has uses spec directory if present' do
+      it 'uses spec directory without args', :dms => true do
         expect('').to include_path('spec')
       end
 
@@ -146,6 +146,17 @@ module Speckle
       it 'includes spec directory if no files were specified with -t or --test' do
         expect('-t').to include_path('spec')
         expect('--test').to include_path('spec')
+      end
+
+      it 'does not use spec directory when file is specified', :dms => true do
+        expect('a.riml').to include_path('a.riml')
+        expect('a.riml').to_not include_path('spec')
+      end
+
+      it 'does not use spec directory when multiple file is specified', :dms => true do
+        env = Environment.new
+        opts = env.load(['a.riml', 'b.riml'])
+        expect(opts.inputs).to eq(['a.riml', 'b.riml'])
       end
     end
 
