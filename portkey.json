@@ -10,7 +10,8 @@
     "type": "runner"
   },
   "lib/writers/*.riml": {
-    "type": "writer"
+    "type": "writer",
+    "mapping": "i"
   },
   "lib/utils/*.riml": {
     "type": "utility"

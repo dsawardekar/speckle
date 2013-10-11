@@ -114,14 +114,18 @@ module Speckle
           parser.parse!(args)
 
           if options.action.nil?
-            spec_dir = "#{options.cwd}/spec"
-            if File.directory?(spec_dir)
-              args << 'spec'
-              options.action = :compile_and_test
+            if args_empty?(args)
+              spec_dir = "#{options.cwd}/spec"
+              if File.directory?(spec_dir)
+                args << 'spec'
+                options.action = :compile_and_test
+              else
+                options.action = :show_no_spec_dir
+              end
             else
-              options.action = :show_no_spec_dir
+              options.action = :compile_and_test
             end
-          elsif action_needs_args?(options.action) and args.empty?
+          elsif action_needs_args?(options.action) and args_empty?(args)
             spec_dir = "#{options.cwd}/spec"
             if File.directory?(spec_dir)
               args << 'spec'
@@ -163,6 +167,10 @@ module Speckle
         end
 
         libs.uniq.join(':')
+      end
+
+      def args_empty?(args)
+        args.empty? || (args.length == 1 && args[0] == '')
       end
     end
 
