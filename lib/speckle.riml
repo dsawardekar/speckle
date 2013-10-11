@@ -105,6 +105,10 @@ class g:Speckle
     return g:speckle_output_file
   end
 
+  defm get_exit_code_file
+    return self.get_output_file() . '.exit'
+  end
+
   defm get_reporter_name
     return g:speckle_reporter_name
   end
@@ -149,6 +153,8 @@ class g:Speckle
     if self.is_file_mode()
       writer.flush()
     end
+
+    self.write_exit_code(stats.is_ok())
   end
 
   defm add_specs(runner, lines)
@@ -163,5 +169,16 @@ class g:Speckle
         klass_instance.spec_name = spec_name
       end
     end
+  end
+
+  defm get_exit_code(ok)
+    return ok == true ? '0' : '1'
+  end
+
+  defm write_exit_code(ok)
+    writer = new FileWriter()
+    writer.set_output_file(self.get_exit_code_file())
+    writer.write(self.get_exit_code(ok))
+    writer.flush()
   end
 end
