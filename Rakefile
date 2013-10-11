@@ -77,6 +77,7 @@ namespace :speckle do
   TEST_VIM = ENV['TEST_VIM'] || 'vim'
   TEST_REPORTER = ENV['TEST_REPORTER'] || 'spec'
   TEST_LOG = "#{BUILD_DIR}/speckle.log"
+  TEST_EXIT_FILE = "#{TEST_LOG}.exit"
   DEBUG_LOG = "#{BUILD_DIR}/debug.log"
   TEST_SOURCES  = FileList.new do |fl|
     sources = ENV['TEST_SOURCES']
@@ -217,9 +218,18 @@ namespace :speckle do
     begin
       verbose DEBUG do
         launch_file = get_launch_cmd_file()
+        File.delete(TEST_LOG) if File.exist?(TEST_LOG)
+        File.delete(TEST_EXIT_FILE) if File.exist?(TEST_EXIT_FILE)
+
         sh "#{TEST_VIM} #{get_vim_options()} -S #{launch_file.path}"
-        sh "cat #{TEST_LOG}"
         launch_file.unlink
+        if File.exist?(TEST_EXIT_FILE)
+          sh "cat #{TEST_LOG}"
+          exit_code = File.read(TEST_EXIT_FILE)[0].to_i
+          exit!(exit_code)
+        else
+          fail "Fatal error: #{TEST_LOG} not found."
+        end
       end
     rescue RuntimeError => error
       puts error

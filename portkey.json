@@ -1,0 +1,33 @@
+{
+  "lib/matchers/*.riml": {
+    "type": "matcher",
+    "test": "spec/matchers/%s_spec.riml"
+  },
+  "lib/reporters/*.riml": {
+    "type": "reporter"
+  },
+  "lib/runners/*.riml": {
+    "type": "runner"
+  },
+  "lib/writers/*.riml": {
+    "type": "writer",
+    "mapping": "i"
+  },
+  "lib/utils/*.riml": {
+    "type": "utility"
+  },
+  "lib/speckle/cli/*.rb": {
+    "type": "cli"
+  },
+  "lib/speckle/list/*.rb": {
+    "type": "list"
+  },
+
+  "spec/matchers/*_spec.riml": {
+    "type": "spec",
+    "alternate": "lib/matchers/%s.riml"
+  },
+  "spec/*_spec.riml": {
+    "type": "spec"
+  }
+}
