@@ -310,11 +310,13 @@ Options:
     -I, --libs <libs>                Specify additional riml library path(s)
     -g, --grep <pattern>             Only run tests matching the pattern
     -i, --invert                     Inverts --grep matches
+        --tag <tag>                  Only run tests matching tag
     -r, --reporter <reporter>        Specify the reporter to use (spec, min, dot, tap, fivemat)
     -b, --bail                       Bail on first test failure
     -w, --watch                      Watch tests for changes
     -m, --vim <vim>                  Vim program used to test, default(vim)
     -s, --slow-threshold <ms>        Threshold in milliseconds to indicate slow tests
+    -p, --profile                    Profiles the tests run
     -k, --skip-vimrc                 Does not load ~/.vimrc file
     -C, --no-colors                  Disable color output
     -v, --verbose                    Display verbose output
