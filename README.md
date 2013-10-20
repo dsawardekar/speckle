@@ -249,6 +249,36 @@ VariousErrorsSpec #it has unknown function
        at <SNR>144_s:VariousErrorsSpec_it_has_unknown_function, line 2
 ```
 
+## Profiling
+
+Speckle integrates with Vim's built-in profiler. Use the `-p` or `--profile`
+switches to turn on profiling. When profiling is turned on, Speckle prints a
+summary of the *Total Time* and *Self Time* of functions executed in your
+tests as shown below,
+
+```log
+------------------------------------------------------------------------------
+PROFILE SUMMARY
+------------------------------------------------------------------------------
+
+FUNCTIONS SORTED ON TOTAL TIME
+count  total (s)   self (s)  function
+  111   1.305531   0.003775  <SNR>212_s:CommandRegistry_run_command()
+  605   1.268269   0.008920  <SNR>181_expect()
+   98   1.221755   0.002080  <SNR>212_s:CommandRegistry_run_action()
+   81   1.068915   0.001752  <SNR>222_s:CommandRegistry_run_action()
+   81   1.066899   0.002717  <SNR>222_s:CommandRegistry_run_command()
+    9   0.893186   0.000369  <SNR>222_s:GetFileCommandSpec_verify_gf()
+   42   0.827668   0.000382  <SNR>212_s:Controller_process()
+   41   0.764384   0.000386  <SNR>222_s:Controller_process()
+```
+
+The full profile containing further details like per-line execution times
+can be viewed in the file `build/speckle.profile`.
+
+This option works with all the isolated testing options below. Profiling can
+be used alongside `--grep` and `--tag` to only profile specific tests.
+
 ## Isolated Testing
 
 Speckle can be made to run only specific tests using the `--grep` option. For example, to only run tests in the `spec/models` folder use
