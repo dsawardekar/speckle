@@ -24,7 +24,7 @@ module Speckle
 
       def debug
         @options.debug
-      end 
+      end
 
       def rake
         if @rake_app
@@ -53,7 +53,7 @@ module Speckle
           ENV[key] = if value.is_a?(Array) then value.join(';') else value end
           puts "rake_env: #{key} = #{ENV[key]}" if debug
         end
-      end 
+      end
 
       def configure_rake
         rake_env('TEST_SOURCES', test_sources)
@@ -67,6 +67,10 @@ module Speckle
         rake_env('COLORIZE', to_int(@options.colorize))
         rake_env('BAIL', to_int(@options.bail))
         rake_env('TAG', @options.tag)
+
+        if @options.profile
+          rake_env('PROFILE', 'yes')
+        end
 
         if @options.verbose
           rake_env('VERBOSE', 'yes')

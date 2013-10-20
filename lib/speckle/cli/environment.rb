@@ -27,6 +27,7 @@ module Speckle
         options.colorize = true
         options.bail = false
         options.tag = nil
+        options.profile = false
 
         parser = OptionParser.new do |opts|
           options.opts = opts
@@ -82,6 +83,10 @@ module Speckle
 
           opts.on('-s', '--slow-threshold <ms>', Integer, 'Threshold in milliseconds to indicate slow tests') do |ms|
             options.slow_threshold = ms
+          end
+
+          opts.on('-p', '--profile', 'Profiles the tests run') do
+            options.profile = true
           end
 
           opts.on('-k', '--skip-vimrc', 'Does not load ~/.vimrc file') do

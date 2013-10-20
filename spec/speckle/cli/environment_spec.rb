@@ -282,6 +282,18 @@ module Speckle
         expect(opts.inputs.length).to eq(1)
       end
 
+      it 'does not have profile option by default' do
+        expect([]).to_not have_default_option('profile')
+      end
+
+      it 'has profile option when specified' do
+        expect(['-p']).to yield_option_value('profile', true)
+      end
+
+      it 'has profile option with long switch' do
+        expect(['--profile']).to yield_option_value('profile', true)
+      end
+
     end
 
     describe 'Complete CLI options' do
