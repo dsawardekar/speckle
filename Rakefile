@@ -103,6 +103,9 @@ namespace :speckle do
     end
   end
 
+  PROFILE = ENV.has_key?('PROFILE')
+  PROFILE_PATH = "#{BUILD_DIR}/speckle.profile"
+
   desc 'All tasks'
   task :all => [:clean, :compile, :compile_tests, :test]
 
@@ -220,11 +223,20 @@ namespace :speckle do
         launch_file = get_launch_cmd_file()
         File.delete(TEST_LOG) if File.exist?(TEST_LOG)
         File.delete(TEST_EXIT_FILE) if File.exist?(TEST_EXIT_FILE)
+        File.delete(PROFILE_PATH) if File.exist?(PROFILE_PATH)
 
         sh "#{TEST_VIM} #{get_vim_options()} -S #{launch_file.path}"
         launch_file.unlink
         if File.exist?(TEST_EXIT_FILE)
           sh "cat #{TEST_LOG}"
+          if PROFILE
+            puts ''
+            puts '------------------------------------------------------------------------------'
+            puts "PROFILE SUMMARY"
+            puts '------------------------------------------------------------------------------'
+            puts ''
+            print_profile
+          end
           exit_code = File.read(TEST_EXIT_FILE)[0].to_i
           exit!(exit_code)
         else
@@ -241,14 +253,17 @@ namespace :speckle do
 
   # utils
   def get_launch_cmd_source
-    launch_cmd = <<CMD
-      source #{SPECKLE_OUTPUT}
-CMD
+    launch_cmd = "source #{SPECKLE_OUTPUT}\n"
+
+    if PROFILE
+      launch_cmd += "profile start #{PROFILE_PATH}\n"
+    end
 
     TEST_COMPILED.each do |t|
-      launch_cmd += <<CMD
-      source #{t}
-CMD
+      if PROFILE
+        launch_cmd += "profile! file #{t}\n"
+      end
+      launch_cmd += "source #{t}\n"
     end
 
     launch_cmd += <<CMD
@@ -260,10 +275,13 @@ CMD
       let g:speckle_colorize = #{COLORIZE}
       let g:speckle_bail = #{BAIL}
 CMD
+
     if TAG
-      launch_cmd += <<CMD
-      let g:speckle_tag = '#{TAG}'
-CMD
+      launch_cmd += "let g:speckle_tag = '#{TAG}'\n"
+    end
+
+    if PROFILE
+      launch_cmd += "let g:speckle_profile = 1\n"
     end
 
     launch_cmd += <<CMD
@@ -285,6 +303,22 @@ CMD
     file.close
 
     file
+  end
+
+  def print_profile
+    can_print = false
+
+    f = File.open(PROFILE_PATH)
+    f.each do |line|
+      if !can_print && line =~ /FUNCTIONS SORTED ON TOTAL TIME/
+        can_print = true
+      end
+      if can_print
+        puts line
+      end
+    end
+
+    f.close
   end
 
 end

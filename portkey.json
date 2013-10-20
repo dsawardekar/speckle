@@ -17,7 +17,8 @@
     "type": "utility"
   },
   "lib/speckle/cli/*.rb": {
-    "type": "cli"
+    "type": "cli",
+    "test": "spec/speckle/cli/%s_spec.rb"
   },
   "lib/speckle/list/*.rb": {
     "type": "list"
@@ -29,5 +30,9 @@
   },
   "spec/*_spec.riml": {
     "type": "spec"
+  },
+  "spec/speckle/cli/*_spec.rb": {
+    "type": "spec",
+    "alternate": "lib/speckle/cli/%s.rb"
   }
 }
