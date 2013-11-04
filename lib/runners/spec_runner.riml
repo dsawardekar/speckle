@@ -107,7 +107,13 @@ class SpecRunner
     reporter.on_context_end(context, stats)
   end
 
-  defm report_hook_error(hook, context, reporter, stats)
+  defm stop
+    self.stopped = true
+  end
+
+  " private methods
+
+  def report_hook_error(hook, context, reporter, stats)
     meta = new SpecMeta(context, hook)
 
     reporter.on_spec_start(meta, stats)
@@ -117,7 +123,7 @@ class SpecRunner
     reporter.on_spec_error(meta, error, stats)
   end
 
-  defm call_hook(hook)
+  def call_hook(hook)
     if has_key(self.spec, hook)
       return call(self.spec[hook], [], self.spec)
     else
@@ -125,19 +131,7 @@ class SpecRunner
     end
   end
 
-  defm stop()
-    self.stopped = true
-  end
-
-  defm is_test_method(method)
-    return method =~ '^it'
-  end
-
-  defm is_tagged(method)
-    return method =~ "_#{self.tag}$"
-  end
-
-  defm can_run_test_for(method)
+  def can_run_test_for(method)
     if self.tag == ''
       return self.is_test_method(method)
     else
@@ -145,6 +139,13 @@ class SpecRunner
     end
   end
 
+  def is_test_method(method)
+    return method =~ '^it'
+  end
+
+  def is_tagged(method)
+    return method =~ "_#{self.tag}$"
+  end
 end
 
 class SpecError
@@ -156,11 +157,11 @@ class SpecError
     self.throwpoint = v:throwpoint
   end
 
-  defm get_message()
+  defm get_message
     return self.message
   end
 
-  defm get_stacktrace()
+  defm get_stacktrace
     unless has_key(self, 'stacktrace')
       self.build_stacktrace()
     end
@@ -168,7 +169,7 @@ class SpecError
     return self.stacktrace
   end
 
-  defm build_stacktrace()
+  def build_stacktrace
     str = substitute(self.throwpoint, '\v(function )', '', '')
     self.stacktrace = split(str, '\.\.')
     self.stacktrace = map(self.stacktrace, '"at " . v:val')

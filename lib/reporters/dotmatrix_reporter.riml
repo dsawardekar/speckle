@@ -1,7 +1,7 @@
 class DotMatrixReporter < BaseReporter
 
-  def initialize()
-    super()
+  def initialize
+    super
     self.dots = 0
     self.line_buffer = []
     self.log_messages = []
@@ -29,7 +29,7 @@ class DotMatrixReporter < BaseReporter
     context = meta.get_context()
     add(self.line_buffer, self.to_red("#{context} ##{name}"))
     add(self.line_buffer, self.to_red("    #{err.get_message()}"))
-    
+
     self.print_stacktrace(err)
 
     add(self.line_buffer, '')
@@ -39,7 +39,7 @@ class DotMatrixReporter < BaseReporter
     self.on_spec_failure(meta, err, stats)
   end
 
-  defm write_epilogue_separator()
+  defm write_epilogue_separator
     self.flush_log_buffer()
 
     self.writer.writeln('')

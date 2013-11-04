@@ -1,5 +1,5 @@
 class BaseReporter
-  def initialize()
+  def initialize
     self.colorize_output = true
     self.log_buffer = []
   end
@@ -32,14 +32,14 @@ class BaseReporter
 
   defm on_spec_failure(meta, err, stats)
   end
-  
+
   defm on_spec_error(meta, err, stats)
   end
 
   defm on_spec_pending(meta, stats)
   end
 
-  defm duration_to_str(duration)
+  def duration_to_str(duration)
     time = a:duration
     if time >= 1000
       time = time / 1000

@@ -13,7 +13,7 @@ class g:Expectation
     for match_item in match_items
       func_name = "g:Expectation_#{match_item.name}"
       matcher_func = <<EOS
-function! #{func_name}(...) dict  
+function! #{func_name}(...) dict
   if a:0 == 0
     let expected = 'null'
   else
@@ -22,10 +22,10 @@ function! #{func_name}(...) dict
 
   let matcher_name = '#{match_item.name}'
   let match_tester = g:MatchTesterConstructor()
-  call match_tester.test_from_env(matcher_name, expected)"
-endfunction"   
+  call match_tester.test_from_env(matcher_name, expected)
+endfunction
 EOS
-      :exe matcher_func
+      exec matcher_func
 
       self[match_item.name] = function(func_name)
     end

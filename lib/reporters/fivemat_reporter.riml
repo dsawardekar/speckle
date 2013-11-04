@@ -1,7 +1,7 @@
 class FivematReporter < BaseReporter
 
-  def initialize()
-    super()
+  def initialize
+    super
     self.indents = 0
     self.log_buffer = []
     self.current_index = 0
@@ -82,7 +82,7 @@ class FivematReporter < BaseReporter
     self.show_error('Error', meta, err, stats)
   end
 
-  defm indent_to_str()
+  defm indent_to_str
     return repeat("  ", self.indents)
   end
 
@@ -94,15 +94,15 @@ class FivematReporter < BaseReporter
     self.indents -= size
   end
 
-  defm write_epilogue_separator()
+  defm write_epilogue_separator
     self.writer.writeln('')
-    super()
+    super
   end
 
   defm write_log_line(line)
     self.write_errorln(" log: #{line}")
   end
-  
+
   defm write_stacktrace_line(line)
     self.write_errorln(" " . line)
   end
