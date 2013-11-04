@@ -17,7 +17,7 @@ class SpecTimer
     return self.duration
   end
 
-  defm time_to_ms(time)
+  def time_to_ms(time)
     duration_str = reltimestr(time)
     duration_split = split(duration_str, '\.')
     seconds = str2nr(duration_split[0])

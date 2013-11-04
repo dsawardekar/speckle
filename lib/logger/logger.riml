@@ -23,6 +23,30 @@ class Logger
     self.colors.off = 0
   end
 
+  defm debug(*args)
+    self.do_log(args, 'debug')
+  end
+
+  defm info(*args)
+    self.do_log(args, 'info')
+  end
+
+  defm log(*args)
+    self.do_log(args, 'info')
+  end
+
+  defm warn(*args)
+    self.do_log(args, 'warn')
+  end
+
+  defm error(*args)
+    self.do_log(args, 'error')
+  end
+
+  defm fatal(*args)
+    self.do_log(args, 'fatal')
+  end
+
   defm add_log_writer(log_writer)
     add(self.log_writers, log_writer)
   end
@@ -43,18 +67,20 @@ class Logger
     return self.get_level_num(level) >= self.get_level_num(self.level)
   end
 
-  defm do_log(args, level)
+  " private methods
+
+  def do_log(args, level)
     if self.is_loggable(level)
       msg = self.args_to_message(args)
       self.send_log(msg, level)
     end
   end
 
-  defm args_to_message(args)
+  def args_to_message(args)
     return join(args, ' ')
   end
 
-  defm send_log(msg, level)
+  def send_log(msg, level)
     color_msg = self.to_color(msg, level)
 
     for log_writer in self.log_writers
@@ -66,7 +92,7 @@ class Logger
     end
   end
 
-  defm to_color(msg, level)
+  def to_color(msg, level)
     color = self.colors[level]
     if color != 0
       return "[#{color}#{msg}[0m"
@@ -75,39 +101,11 @@ class Logger
     end
   end
 
-  defm debug(...)
-    self.do_log(a:000, 'debug')
-  end
-
-  defm info(...)
-    self.do_log(a:000, 'info')
-  end
-
-  defm log(...)
-    self.do_log(a:000, 'info')
-  end
-
-  defm warn(...)
-    self.do_log(a:000, 'warn')
-  end
-
-  defm error(...)
-    self.do_log(a:000, 'error')
-  end
-
-  defm fatal(...)
-    self.do_log(a:000, 'fatal')
-  end
-
 end
 
 def get_logger()
-  unless exists('g:logger')
-    g:logger = new Logger()
-  end
-
+  g:logger = new Logger() unless g:logger?
   return g:logger
 end
 
-logger = get_logger()
-
+s:logger = get_logger()

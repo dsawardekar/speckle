@@ -63,13 +63,13 @@ class g:Speckle
     self.options(options_map)
   end
 
-  defm options(options_map)
+  def options(options_map)
     for [name, value] in items(options_map)
       self.option(name, value)
     end
   end
 
-  defm option(variable, default)
+  def option(variable, default)
     if !exists("g:speckle_#{variable}")
       execute("let g:speckle_#{variable} = #{default}")
     end
