@@ -164,9 +164,11 @@ module Speckle
       def build_riml_path(dirs, pattern = /.*\.riml$/, spec_pattern = /.*_spec\.riml$/)
         libs = []
         dirs.each do |dir|
-          Find.find(dir) do |path|
-            if path =~ pattern && path !~ spec_pattern
-              libs << File.dirname(path)
+          if File.directory?(dir)
+            Find.find(dir) do |path|
+              if path =~ pattern && path !~ spec_pattern
+                libs << File.dirname(path)
+              end
             end
           end
         end

@@ -47,23 +47,25 @@ class EqualityMatcher
     return "expected “#{actual_str}” to not equal “#{expected_str}”"
   end
 
-  defm type_mismatch_message(expected, actual)
+  " private methods
+
+  def type_mismatch_message(expected, actual)
     actual_type = self.typeof(actual)
     expected_type = self.typeof(expected)
 
-    return "type mismatch, actual(#{string(actual)}) is “#{actual_type}”, expected(#{string(expected)}) is “#{expected_type}”"
+    return "type mismatch, actual(#{string(actual)}) is “#{actual_type}”, "
+      \ "expected(#{string(expected)}) is “#{expected_type}”"
   end
 
-  " helpers "
-  defm typeof(variable)
+  def typeof(variable)
     return self.type_to_str(type(variable))
   end
 
-  defm type_to_str(num)
+  def type_to_str(num)
     return self.types[num]
   end
 
-  defm stringify(value)
+  def stringify(value)
     value_type = type(value)
 
     if value_type == type('') || value_type == type(1)

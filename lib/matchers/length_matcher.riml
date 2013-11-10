@@ -1,7 +1,7 @@
 class LengthMatcher
   defm match(expected, actual)
     self.result = len(actual)
-    return self.result == expected
+    return self.result === expected
   end
 
   defm failure_message_for_match(expected, actual)

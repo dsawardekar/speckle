@@ -1,5 +1,5 @@
 class Runner
-  def initialize()
+  def initialize
     self.specs = []
     self.halt = false
     self.stopped = false
@@ -11,7 +11,7 @@ class Runner
     self.bail = bail
   end
 
-  defm get_bail()
+  defm get_bail
     return self.bail
   end
 
@@ -19,7 +19,7 @@ class Runner
     self.tag = tag
   end
 
-  defm get_tag()
+  defm get_tag
     return self.tag
   end
 
@@ -53,7 +53,7 @@ class Runner
     reporter.on_end(timer.get_duration(), stats)
   end
 
-  defm stop()
+  defm stop
     self.stopped = true
   end
 

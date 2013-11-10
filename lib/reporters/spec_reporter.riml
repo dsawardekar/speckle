@@ -1,7 +1,7 @@
 class SpecReporter < BaseReporter
 
-  def initialize()
-    super()
+  def initialize
+    super
     self.indents = 0
     self.log_buffer = []
   end
@@ -48,7 +48,7 @@ class SpecReporter < BaseReporter
     self.on_spec_failure(meta, err, stats)
   end
 
-  defm indent_to_str()
+  defm indent_to_str
     return repeat("  ", self.indents)
   end
 
@@ -60,15 +60,15 @@ class SpecReporter < BaseReporter
     self.indents -= size
   end
 
-  defm write_epilogue_separator()
+  defm write_epilogue_separator
     self.writer.writeln('')
-    super()
+    super
   end
 
   defm write_log_line(line)
     self.write("log: #{line}")
   end
-  
+
   defm write_stacktrace_line(line)
     self.write(line)
   end

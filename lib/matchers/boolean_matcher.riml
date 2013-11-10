@@ -1,6 +1,6 @@
 class BooleanMatcher
   defm match(expected, actual)
-    return actual == true
+    return actual === true
   end
 
   defm failure_message_for_match(expected, actual)

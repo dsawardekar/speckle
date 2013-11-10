@@ -8,11 +8,10 @@ class g:MatchTester
     matcher = match_item.matcher
     actual = env.actual
 
-    tester = new g:MatchTester()
-    tester.test(matcher, negate, a:expected, actual)
+    self.test(matcher, negate, expected, actual)
   end
 
-  defm test(matcher, negate, expected, actual)
+  def test(matcher, negate, expected, actual)
     result = matcher.match(expected, actual)
     g:speckle_env.assertions += 1
     if negate

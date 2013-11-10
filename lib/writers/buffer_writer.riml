@@ -7,10 +7,6 @@ class BufferWriter
     self.writer.set_output_file(output_file)
   end
 
-  defm strip_colors(line)
-    return substitute(line, '\e\[[0-9;]\+[mK]', '', 'g')
-  end
-
   defm write(line)
     self.writer.write(line)
 
@@ -33,5 +29,11 @@ class BufferWriter
 
   defm flush_line()
     self.writer.flush_line()
+  end
+
+  " private methods
+
+  def strip_colors(line)
+    return substitute(line, '\e\[[0-9;]\+[mK]', '', 'g')
   end
 end

@@ -143,16 +143,19 @@ namespace :speckle do
     require 'riml'
 
     opts = get_riml_opts(libs, build_dir)
+    Riml::FileRollback.trap(:INT, :QUIT, :KILL) { $stderr.print("\n"); exit(1) }
     verbose true do
       #sh "bundle exec riml -c #{t} -I #{TEST_LIBS} -o #{BUILD_DIR}"
-      TEST_SOURCES.each do |t|
-        puts "Compiling: #{t} "
-        Riml.compile_files(t, opts)
+      Riml::FileRollback.guard do
+        TEST_SOURCES.each do |t|
+          puts "Compiling: #{t} "
+          Riml.compile_files(t, opts)
 
-        spec_dir = "#{BUILD_DIR}/#{File.dirname(t)}"
-        verbose DEBUG do
-          mkdir_p "#{spec_dir}"
-          mv "#{BUILD_DIR}/#{File.basename(t).ext('vim')}", "#{spec_dir}"
+          spec_dir = "#{BUILD_DIR}/#{File.dirname(t)}"
+          verbose DEBUG do
+            mkdir_p "#{spec_dir}"
+            mv "#{BUILD_DIR}/#{File.basename(t).ext('vim')}", "#{spec_dir}"
+          end
         end
       end
     end
@@ -221,13 +224,13 @@ namespace :speckle do
     begin
       verbose DEBUG do
         launch_file = get_launch_cmd_file()
-        File.delete(TEST_LOG) if File.exist?(TEST_LOG)
-        File.delete(TEST_EXIT_FILE) if File.exist?(TEST_EXIT_FILE)
-        File.delete(PROFILE_PATH) if File.exist?(PROFILE_PATH)
+        File.delete(TEST_LOG) if File.exists?(TEST_LOG)
+        File.delete(TEST_EXIT_FILE) if File.exists?(TEST_EXIT_FILE)
+        File.delete(PROFILE_PATH) if File.exists?(PROFILE_PATH)
 
         sh "#{TEST_VIM} #{get_vim_options()} -S #{launch_file.path}"
         launch_file.unlink
-        if File.exist?(TEST_EXIT_FILE)
+        if File.exists?(TEST_EXIT_FILE)
           sh "cat #{TEST_LOG}"
           if PROFILE
             puts ''
