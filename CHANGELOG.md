@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.29
+
+* Upgrades to riml 0.3.9
+
 ### 0.1.28
 
 * Upgrades to riml 0.3.7
