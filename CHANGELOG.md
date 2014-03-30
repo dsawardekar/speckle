@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.1.31
+
+* Fixes travis for bundler 1.6
+
 ### 0.1.30
 
 * Upgrades to riml 0.4.0
