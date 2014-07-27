@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.2.0
+
+* Adds support for RIML_DIR. If it points to the @tek's fork, it will be used
+  instead of the rubygems riml.
+
 ### 0.1.31
 
 * Fixes travis for bundler 1.6

@@ -106,6 +106,12 @@ namespace :speckle do
   PROFILE = ENV.has_key?('PROFILE')
   PROFILE_PATH = "#{BUILD_DIR}/speckle.profile"
 
+  if ENV.has_key?('RIML_DIR')
+    RIML_EXEC = "#{ENV['RIML_DIR']}/bin/riml"
+  else
+    RIML_EXEC = "bundle exec riml"
+  end
+
   desc 'All tasks'
   task :all => [:clean, :compile, :compile_tests, :test]
 
@@ -121,16 +127,16 @@ namespace :speckle do
   task :compile => [:build] do
     puts "Compiling: #{SPECKLE_MAIN}"
     verbose VERBOSE do
-      sh "bundle exec riml -c #{SPECKLE_SOURCE} -I #{SPECKLE_LIBS} -o #{SPECKLE_BUILD_DIR}"
+      sh "#{RIML_EXEC} -c #{SPECKLE_SOURCE} -I #{SPECKLE_LIBS} -o #{SPECKLE_BUILD_DIR}"
     end
 
     verbose VERBOSE do
-      sh "bundle exec riml -c #{SPECKLE_DSL_SOURCE} -o #{SPECKLE_BUILD_DIR}"
+      sh "#{RIML_EXEC} -c #{SPECKLE_DSL_SOURCE} -o #{SPECKLE_BUILD_DIR}"
     end
   end
 
   task :scratch => [:build] do
-    sh "bundle exec riml -c lib/scratch.riml -I #{SPECKLE_LIBS}"
+    sh "#{RIML_EXEC} -c lib/scratch.riml -I #{SPECKLE_LIBS}"
   end
 
   desc "Compile specs"
@@ -140,12 +146,15 @@ namespace :speckle do
   end
 
   def compile_test_files(files, libs, build_dir)
-    require 'riml'
+    if ENV.has_key?('RIML_DIR')
+      require "#{ENV['RIML_DIR']}/lib/riml"
+    else
+      require 'riml'
+    end
 
     opts = get_riml_opts(libs, build_dir)
     Riml::FileRollback.trap(:INT, :QUIT, :KILL) { $stderr.print("\n"); exit(1) }
     verbose true do
-      #sh "bundle exec riml -c #{t} -I #{TEST_LIBS} -o #{BUILD_DIR}"
       Riml::FileRollback.guard do
         TEST_SOURCES.each do |t|
           puts "Compiling: #{t} "
